@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 import './BaseLayout.css';
 
 const Navbar = () => {
+  const { user } = useContext(AuthContext);
   return (
     <header className="navbar">
       <div className="navbar-left">
@@ -11,12 +13,11 @@ const Navbar = () => {
       </div>
       
       <div className="navbar-right">
-        <div className="role-badge">Data Analyst</div>
+        <div className="role-badge">{user?.role?.name || 'User'}</div>
         <div className="user-profile">
-          <span className="user-name">Sarah Jenkins</span>
+          <span className="user-name">{user?.name || 'Loading...'}</span>
           <div className="avatar-placeholder">
-            {/* Menggunakan placeholder gambar sementara untuk Avatar */}
-            <img src="https://ui-avatars.com/api/?name=Sarah+Jenkins&background=6E38F7&color=fff" alt="User Avatar" />
+            <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=6E38F7&color=fff`} alt="User Avatar" />
           </div>
         </div>
       </div>

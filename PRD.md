@@ -167,6 +167,10 @@ dss-project/
 
 ## 11. Keputusan Teknis (Technical Decisions)
 - **Mengapa memisah Backend (Laravel) dan Frontend (ReactJS)?** Agar API Laravel murni berfungsi sebagai penyedia data (JSON) dan *query runner*. ReactJS dipilih di *frontend* karena ekosistem *library* grafiknya sangat kaya, interaktif, dan optimal untuk me-render banyak grafik berat dalam satu *dashboard* tanpa *reload* halaman.
+- **Sistem Autentikasi API (Token-Based):** Disepakati menggunakan **Laravel Sanctum** untuk men-*generate* Token API (*Bearer Token*) alih-alih menggunakan *Session/Cookie* konvensional. Ini membuat komunikasi antara port React (5173) dan Laravel (8000) lebih aman dan terstruktur.
+- **Notifikasi Antarmuka Pengguna (UI):** Menambahkan **SweetAlert2** dan **sweetalert2-react-content** pada Frontend untuk menggantikan *alert* bawaan browser, sehingga pengalaman pengguna (seperti notifikasi sukses/gagal login) terlihat jauh lebih profesional dan *seamless*.
+- **Development Environment:** Secara spesifik menggunakan **Laragon** (menggantikan XAMPP) untuk server database lokal MySQL guna menghindari *error/port collision* yang sering terjadi.
+- **Inisialisasi Data (Seeder):** Otomatisasi pembuatan akun utama pertama kali menggunakan kredensial email spesifik mahasiswa (`mohsyaefuleffendi@student.uns.ac.id`) dengan *role* Data Analyst, agar pengujian aplikasi dapat langsung dilakukan pasca-migrasi.
 - **Mengapa Docker?** Mengadopsi keunggulan Metabase. Dengan Docker, *environment* aplikasi terisolasi dengan rapi. Kontributor atau AI tidak perlu mengurus versi PHP atau Node.js lokal, cukup `docker-compose up`.
 - **Database Query Runner terpisah:** Untuk keamanan, eksekusi *raw query* dari Data Analis akan diarahkan ke koneksi database (`DB_CONNECTION_READONLY`) yang user-nya hanya diberi *privilege* `SELECT`, dilengkapi timeout dan row limit untuk mencegah *resource exhaustion*.
 - **Mengapa Dashboard otomatis, bukan custom?** Menyederhanakan MVP — Data Analis cukup fokus assign role per chart, tanpa perlu langkah tambahan menyusun tata letak dashboard. Ini juga meniru pola *permission-based visibility* yang sering dipakai tool BI enterprise.
