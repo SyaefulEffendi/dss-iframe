@@ -1,0 +1,197 @@
+.charts-container {
+  padding: 1.5rem;
+  background-color: #f4f7f6;
+  min-height: calc(100vh - 70px);
+  font-family: 'Inter', sans-serif;
+}
+
+.charts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.charts-title h1 {
+  font-size: 1.75rem;
+  color: #1a1a1a;
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.charts-title p {
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.charts-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-box {
+  position: relative;
+  width: 250px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.6rem 1rem 0.6rem 2.2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: #6E38F7;
+  box-shadow: 0 0 0 2px rgba(110, 56, 247, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.create-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #6E38F7;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-btn:hover {
+  background-color: #5a2bd9;
+}
+
+.charts-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.charts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.charts-table th,
+.charts-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.charts-table th {
+  background-color: #fafafa;
+  color: #555;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.charts-table td {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.charts-table tr:hover {
+  background-color: #fcfcfc;
+}
+
+.chart-type-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.type-bar {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.type-pie {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.type-line {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.type-default {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+.action-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit {
+  color: #3b82f6;
+}
+.btn-edit:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.btn-delete {
+  color: #ef4444;
+}
+.btn-delete:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #888;
+}
+
+.empty-icon {
+  margin-bottom: 1rem;
+  color: #ccc;
+}
+
+.empty-state h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.95rem;
+}

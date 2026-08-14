@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login/Login';
 import BaseLayout from './components/layout/BaseLayout';
 import DashboardAnalyst from './pages/Dashboard/DashboardAnalyst';
+import ChartsList from './pages/Charts/ChartsList';
 import './App.css';
 
 function App() {
@@ -20,6 +21,14 @@ function App() {
           <ProtectedRoute>
             <BaseLayout>
               <DashboardAnalyst />
+            </BaseLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/charts" element={
+          <ProtectedRoute>
+            <BaseLayout>
+              <ChartsList />
             </BaseLayout>
           </ProtectedRoute>
         } />
