@@ -54,4 +54,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Override the password reset notification to use the frontend URL.
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
+        $url = $frontendUrl . '/reset-password/' . $token . '?email=' . urlencode($this->email);
+        
+        $this->notify(new \Illuminate\Auth\Notifications\ResetPassword($url));
+    }
 }

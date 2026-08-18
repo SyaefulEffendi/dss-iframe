@@ -7,8 +7,11 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SettingsController;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 // Public Embed Route
 Route::get('/public/charts/{token}', [ChartController::class, 'getChartByToken']);
@@ -16,6 +19,9 @@ Route::get('/public/charts/{token}', [ChartController::class, 'getChartByToken']
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Settings
+    Route::post('/settings/profile', [SettingsController::class, 'updateProfile']);
 
     // Dashboard
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);

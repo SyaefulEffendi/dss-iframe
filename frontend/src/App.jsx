@@ -12,6 +12,9 @@ import IframeEmbed from './pages/Embed/IframeEmbed';
 import RolesList from './pages/Roles/RolesList';
 import UsersList from './pages/Users/UsersList';
 import DashboardViewer from './pages/Dashboard/DashboardViewer';
+import Settings from './pages/Settings/Settings';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
 import './App.css';
 
 function App() {
@@ -33,6 +36,8 @@ const AppRoutes = () => {
       {/* Halaman Login berdiri sendiri tanpa BaseLayout */}
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
 
       {/* Dashboard Route */}
       <Route path="/dashboard" element={
@@ -76,6 +81,13 @@ const AppRoutes = () => {
       
       {/* PUBLIC ROUTE FOR IFRAME */}
       <Route path="/embed/:token" element={<IframeEmbed />} />
+
+      {/* Settings Route (Available to all logged in users) */}
+      <Route path="/settings" element={
+        <ProtectedRoute>
+          <BaseLayout><Settings /></BaseLayout>
+        </ProtectedRoute>
+      } />
 
       {/* Fallback Catch-All Route (Akan otomatis dialihkan ke /dashboard atau /login) */}
       <Route path="*" element={<ProtectedRoute><BaseLayout>{isAnalyst ? <DashboardAnalyst /> : <DashboardViewer />}</BaseLayout></ProtectedRoute>} />

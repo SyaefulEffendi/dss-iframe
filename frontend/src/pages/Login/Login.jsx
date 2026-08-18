@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Eye, EyeOff, ShieldCheck, BarChart2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { AuthContext } from '../../context/AuthContext';
@@ -102,7 +102,7 @@ const Login = () => {
             <div className="form-group">
               <div className="password-header">
                 <label htmlFor="password">Password</label>
-                <a href="#" className="forgot-password">Forgot Password?</a>
+                <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
               </div>
               <div className="password-input-wrapper">
                 <input 
