@@ -5,6 +5,7 @@ import Login from './pages/Login/Login';
 import BaseLayout from './components/layout/BaseLayout';
 import DashboardAnalyst from './pages/Dashboard/DashboardAnalyst';
 import ChartsList from './pages/Charts/ChartsList';
+import ChartBuilder from './pages/Charts/ChartBuilder';
 import './App.css';
 
 function App() {
@@ -29,6 +30,14 @@ function App() {
           <ProtectedRoute>
             <BaseLayout>
               <ChartsList />
+            </BaseLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/chart-builder" element={
+          <ProtectedRoute>
+            <BaseLayout>
+              <ChartBuilder />
             </BaseLayout>
           </ProtectedRoute>
         } />

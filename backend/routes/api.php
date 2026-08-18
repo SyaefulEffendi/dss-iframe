@@ -13,5 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Charts
     Route::get('/charts', [ChartController::class, 'index']);
+    Route::post('/charts/run-query', [ChartController::class, 'runQuery']);
     Route::delete('/charts/{id}', [ChartController::class, 'destroy']);
 });

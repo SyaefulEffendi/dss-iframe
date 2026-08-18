@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chart;
 use Illuminate\Http\Request;
+use App\Services\QueryRunnerService;
 
 class ChartController extends Controller
 {
@@ -38,13 +39,36 @@ class ChartController extends Controller
             ], 404);
         }
 
-        // Optional: Check if user has permission to delete (for MVP, Data Analyst can delete any)
-        
         $chart->delete();
 
         return response()->json([
             'success' => true,
             'message' => 'Grafik berhasil dihapus.'
         ]);
+    }
+
+    /**
+     * Eksekusi raw query untuk fitur Chart Builder (Preview mode)
+     */
+    public function runQuery(Request $request, QueryRunnerService $queryRunner)
+    {
+        $request->validate([
+            'query' => 'required|string'
+        ]);
+
+        try {
+            $results = $queryRunner->runQuery($request->input('query'));
+            
+            return response()->json([
+                'success' => true,
+                'data' => $results,
+                'count' => count($results)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400); // Bad Request
+        }
     }
 }
