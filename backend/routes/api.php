@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/charts', [ChartController::class, 'index']);
     Route::post('/charts', [ChartController::class, 'store']);
     Route::get('/charts/{id}', [ChartController::class, 'show']);
+    Route::put('/charts/{id}', [ChartController::class, 'update']);
     Route::post('/charts/{id}/token', [ChartController::class, 'generateToken']);
     Route::post('/charts/run-query', [ChartController::class, 'runQuery']);
     Route::delete('/charts/{id}', [ChartController::class, 'destroy']);

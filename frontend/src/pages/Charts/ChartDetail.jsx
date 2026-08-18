@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ArrowLeft, Code, Copy, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Code, Copy, CheckCircle, Edit3, Save, X } from 'lucide-react';
 import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -13,20 +13,48 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'
 const ChartDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // State Data
   const [chart, setChart] = useState(null);
+  const [allRoles, setAllRoles] = useState([]);
+  
+  // State UI
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // State Editor
+  const [editData, setEditData] = useState({
+    title: '',
+    description: '',
+    chart_type: '',
+    x_axis: '',
+    y_axis: '',
+    selectedRoles: []
+  });
 
   useEffect(() => {
     fetchChartDetail();
+    fetchAllRoles();
   }, [id]);
 
   const fetchChartDetail = async () => {
     try {
       const response = await axios.get(`/api/charts/${id}`);
       if (response.data.success) {
-        setChart(response.data.data);
+        const c = response.data.data;
+        setChart(c);
+        // Initialize Edit Data
+        setEditData({
+          title: c.title,
+          description: c.description || '',
+          chart_type: c.chart_type,
+          x_axis: c.config.x_axis,
+          y_axis: c.config.y_axis,
+          selectedRoles: c.roles.map(r => r.id)
+        });
       }
     } catch (err) {
       MySwal.fire('Error', 'Gagal memuat detail grafik atau Anda tidak memiliki akses.', 'error');
@@ -36,12 +64,22 @@ const ChartDetail = () => {
     }
   };
 
+  const fetchAllRoles = async () => {
+    try {
+      const res = await axios.get('/api/roles');
+      if (res.data.success) {
+        setAllRoles(res.data.data);
+      }
+    } catch (err) {
+      console.error("Gagal mengambil roles", err);
+    }
+  };
+
   const generateToken = async () => {
     setGenerating(true);
     try {
       const response = await axios.post(`/api/charts/${id}/token`);
       if (response.data.success) {
-        // Refresh detail chart for the new token
         setChart({ ...chart, embed_token: response.data.embed_token });
         MySwal.fire({ icon: 'success', title: 'Token Dibuat!', toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
       }
@@ -60,24 +98,68 @@ const ChartDetail = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Bersihkan data untuk recharts
+  // Bersihkan data untuk recharts berdasarkan sumbu Y dari form (jika edit) atau dari chart (jika view)
   const getCleanData = () => {
     if (!chart || !chart.data) return [];
-    const { y_axis } = chart.config;
+    const yAxisKey = isEditing ? editData.y_axis : chart.config.y_axis;
     return chart.data.map(item => {
       const cleanItem = { ...item };
-      if (y_axis && cleanItem[y_axis] !== null) {
-         cleanItem[y_axis] = Number(cleanItem[y_axis]);
+      if (yAxisKey && cleanItem[yAxisKey] !== null) {
+         cleanItem[yAxisKey] = Number(cleanItem[yAxisKey]);
       }
       return cleanItem;
     });
   };
 
+  // Daftar kolom hasil kueri
+  const getColumns = () => {
+    if (!chart || !chart.data || chart.data.length === 0) return [];
+    return Object.keys(chart.data[0]);
+  };
+
+  const toggleRole = (roleId) => {
+    if (editData.selectedRoles.includes(roleId)) {
+      setEditData({ ...editData, selectedRoles: editData.selectedRoles.filter(id => id !== roleId) });
+    } else {
+      setEditData({ ...editData, selectedRoles: [...editData.selectedRoles, roleId] });
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    if (!editData.title || editData.selectedRoles.length === 0) {
+      MySwal.fire('Error', 'Judul dan minimal satu Role harus diisi!', 'error');
+      return;
+    }
+
+    setIsSaving(true);
+    const payload = {
+      title: editData.title,
+      description: editData.description,
+      chart_type: editData.chart_type,
+      config: { x_axis: editData.x_axis, y_axis: editData.y_axis },
+      role_ids: editData.selectedRoles
+    };
+
+    try {
+      const response = await axios.put(`/api/charts/${id}`, payload);
+      if (response.data.success) {
+        MySwal.fire({ icon: 'success', title: 'Berhasil', text: 'Grafik diperbarui!', toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
+        setIsEditing(false);
+        fetchChartDetail(); // Reload latest data
+      }
+    } catch (err) {
+      MySwal.fire('Gagal', err.response?.data?.message || 'Terjadi kesalahan.', 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   if (loading) return <div className="chart-detail-container"><p>Memuat data...</p></div>;
   if (!chart) return null;
 
-  const { chart_type, config, title, description, roles, creator, embed_token } = chart;
-  const { x_axis, y_axis } = config;
+  const currentChartType = isEditing ? editData.chart_type : chart.chart_type;
+  const currentXAxis = isEditing ? editData.x_axis : chart.config.x_axis;
+  const currentYAxis = isEditing ? editData.y_axis : chart.config.y_axis;
 
   return (
     <div className="chart-detail-container">
@@ -86,23 +168,105 @@ const ChartDetail = () => {
           <button className="back-btn" onClick={() => navigate('/charts')} title="Kembali">
             <ArrowLeft size={24} />
           </button>
-          <div>
-            <h1>{title}</h1>
-            <p style={{ margin: '0.5rem 0 0 0', color: '#666' }}>{description}</p>
+          
+          {isEditing ? (
+             <div className="edit-title-group">
+               <input 
+                 type="text" 
+                 value={editData.title} 
+                 onChange={(e) => setEditData({...editData, title: e.target.value})} 
+                 className="edit-input-title"
+                 placeholder="Judul Grafik"
+               />
+               <input 
+                 type="text" 
+                 value={editData.description} 
+                 onChange={(e) => setEditData({...editData, description: e.target.value})} 
+                 className="edit-input-desc"
+                 placeholder="Deskripsi Singkat"
+               />
+             </div>
+          ) : (
+            <div>
+              <h1>{chart.title}</h1>
+              <p style={{ margin: '0.5rem 0 0 0', color: '#666' }}>{chart.description}</p>
+            </div>
+          )}
+        </div>
+        
+        <div className="header-actions">
+          {isEditing ? (
+            <>
+              <button className="cancel-edit-btn" onClick={() => setIsEditing(false)} disabled={isSaving}>
+                <X size={18} /> Batal
+              </button>
+              <button className="save-edit-btn" onClick={handleSaveChanges} disabled={isSaving}>
+                <Save size={18} /> {isSaving ? 'Menyimpan...' : 'Simpan Perubahan'}
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="edit-mode-btn" onClick={() => setIsEditing(true)}>
+                <Edit3 size={18} /> Edit Grafik
+              </button>
+              <button className="generate-token-btn" onClick={generateToken} disabled={generating}>
+                <Code size={18} />
+                {generating ? 'Memproses...' : (chart.embed_token ? 'Regenerate Iframe Token' : 'Generate Iframe Token')}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {isEditing ? (
+        <div className="edit-config-panel">
+          <div className="config-row">
+            <div className="config-group">
+              <label>Tipe Grafik</label>
+              <select className="config-select" value={editData.chart_type} onChange={(e) => setEditData({...editData, chart_type: e.target.value})}>
+                <option value="bar">Bar Chart</option>
+                <option value="pie">Pie Chart</option>
+                <option value="line">Line Chart</option>
+              </select>
+            </div>
+            <div className="config-group">
+              <label>Sumbu X (Label)</label>
+              <select className="config-select" value={editData.x_axis} onChange={(e) => setEditData({...editData, x_axis: e.target.value})}>
+                {getColumns().map(col => <option key={col} value={col}>{col}</option>)}
+              </select>
+            </div>
+            <div className="config-group">
+              <label>Sumbu Y (Nilai)</label>
+              <select className="config-select" value={editData.y_axis} onChange={(e) => setEditData({...editData, y_axis: e.target.value})}>
+                {getColumns().map(col => <option key={col} value={col}>{col}</option>)}
+              </select>
+            </div>
+          </div>
+          
+          <div className="config-group" style={{ marginTop: '1rem' }}>
+            <label>Akses Jabatan (Role)</label>
+            <div className="role-checkboxes-inline">
+              {allRoles.map(role => (
+                <label key={role.id} className="role-label-inline">
+                  <input 
+                    type="checkbox" 
+                    checked={editData.selectedRoles.includes(role.id)} 
+                    onChange={() => toggleRole(role.id)}
+                  />
+                  {role.name}
+                </label>
+              ))}
+            </div>
           </div>
         </div>
-        <button className="generate-token-btn" onClick={generateToken} disabled={generating}>
-          <Code size={18} />
-          {generating ? 'Memproses...' : (embed_token ? 'Regenerate Iframe Token' : 'Generate Iframe Token')}
-        </button>
-      </div>
+      ) : (
+        <div style={{ marginBottom: '1.5rem' }}>
+          <strong>Akses Role:</strong>{' '}
+          {chart.roles && chart.roles.length > 0 ? chart.roles.map(r => <span key={r.id} className="badge-role">{r.name}</span>) : '-'}
+        </div>
+      )}
 
-      <div style={{ marginBottom: '1rem' }}>
-        <strong>Akses Role:</strong>{' '}
-        {roles && roles.length > 0 ? roles.map(r => <span key={r.id} className="badge-role">{r.name}</span>) : '-'}
-      </div>
-
-      {embed_token && (
+      {!isEditing && chart.embed_token && (
         <div className="embed-code-box">
           <button className="copy-btn" onClick={copyToClipboard}>
             {copied ? <CheckCircle size={14} color="#10b981" /> : <Copy size={14} />}
@@ -110,7 +274,7 @@ const ChartDetail = () => {
           </button>
           <p>Salin kode HTML di bawah ini dan tempel ke website Anda:</p>
           <div className="code-snippet">
-            {`<iframe src="${window.location.origin}/embed/${embed_token}" width="100%" height="500" frameborder="0"></iframe>`}
+            {`<iframe src="${window.location.origin}/embed/${chart.embed_token}" width="100%" height="500" frameborder="0"></iframe>`}
           </div>
         </div>
       )}
@@ -120,31 +284,31 @@ const ChartDetail = () => {
           <div style={{ color: 'red' }}>Error Kueri: {chart.query_error}</div>
         ) : (
           <ResponsiveContainer width="100%" height={500}>
-            {chart_type === 'bar' && (
+            {currentChartType === 'bar' && (
               <BarChart data={getCleanData()}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={x_axis} />
+                <XAxis dataKey={currentXAxis} />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey={y_axis} fill="#6366f1" />
+                <Bar dataKey={currentYAxis} fill="#6366f1" />
               </BarChart>
             )}
-            {chart_type === 'line' && (
+            {currentChartType === 'line' && (
               <LineChart data={getCleanData()}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={x_axis} />
+                <XAxis dataKey={currentXAxis} />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey={y_axis} stroke="#6366f1" strokeWidth={3} />
+                <Line type="monotone" dataKey={currentYAxis} stroke="#6366f1" strokeWidth={3} />
               </LineChart>
             )}
-            {chart_type === 'pie' && (
+            {currentChartType === 'pie' && (
               <PieChart>
                 <Tooltip />
                 <Legend />
-                <Pie data={getCleanData()} dataKey={y_axis} nameKey={x_axis} cx="50%" cy="50%" outerRadius={180} label>
+                <Pie data={getCleanData()} dataKey={currentYAxis} nameKey={currentXAxis} cx="50%" cy="50%" outerRadius={180} label>
                   {getCleanData().map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                 </Pie>
               </PieChart>

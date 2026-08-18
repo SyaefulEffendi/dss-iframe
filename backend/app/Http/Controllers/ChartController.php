@@ -108,6 +108,42 @@ class ChartController extends Controller
     }
 
     /**
+     * Update an existing chart in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $chart = Chart::find($id);
+
+        if (!$chart) {
+            return response()->json(['success' => false, 'message' => 'Grafik tidak ditemukan'], 404);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'chart_type' => 'required|in:bar,pie,line',
+            'config' => 'required|array',
+            'role_ids' => 'required|array',
+            'role_ids.*' => 'exists:roles,id'
+        ]);
+
+        $chart->title = $request->title;
+        $chart->description = $request->description;
+        $chart->chart_type = $request->chart_type;
+        $chart->config = $request->config;
+        $chart->save();
+
+        // Sync roles via the pivot table
+        $chart->roles()->sync($request->role_ids);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Grafik berhasil diperbarui!',
+            'data' => $chart
+        ]);
+    }
+
+    /**
      * Get a single chart detail (with dynamic query execution)
      */
     public function show($id, QueryRunnerService $queryRunner)
