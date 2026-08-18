@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -17,6 +18,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/roles', [RoleController::class, 'store']);
+    Route::put('/roles/{id}', [RoleController::class, 'update']);
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
+
+    // Users
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
     // Charts
     Route::get('/charts', [ChartController::class, 'index']);

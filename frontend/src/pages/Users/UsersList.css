@@ -1,0 +1,116 @@
+/* Menggunakan styling yang identik dengan RolesList.css untuk konsistensi */
+.roles-container {
+  padding: 1.5rem;
+}
+
+.roles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.roles-title h1 {
+  margin: 0 0 0.5rem 0;
+  color: #111827;
+  font-size: 1.8rem;
+}
+
+.roles-title p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.create-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.create-btn:hover {
+  background-color: #4f46e5;
+  transform: translateY(-1px);
+}
+
+.roles-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.roles-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.roles-table th, .roles-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.roles-table th {
+  background-color: #f9fafb;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.role-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.role-icon {
+  color: #8b5cf6;
+}
+
+.action-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit:hover {
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.btn-delete:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.badge-role {
+  background-color: #e0e7ff;
+  color: #4338ca;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}

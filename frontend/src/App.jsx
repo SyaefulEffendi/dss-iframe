@@ -8,6 +8,8 @@ import ChartsList from './pages/Charts/ChartsList';
 import ChartBuilder from './pages/Charts/ChartBuilder';
 import ChartDetail from './pages/Charts/ChartDetail';
 import IframeEmbed from './pages/Embed/IframeEmbed';
+import RolesList from './pages/Roles/RolesList';
+import UsersList from './pages/Users/UsersList';
 import './App.css';
 
 function App() {
@@ -48,6 +50,24 @@ function App() {
           <ProtectedRoute>
             <BaseLayout>
               <ChartDetail />
+            </BaseLayout>
+          </ProtectedRoute>
+        } />
+
+        {/* ROLES ROUTE */}
+        <Route path="/roles" element={
+          <ProtectedRoute>
+            <BaseLayout>
+              <RolesList />
+            </BaseLayout>
+          </ProtectedRoute>
+        } />
+
+        {/* USERS ROUTE */}
+        <Route path="/users" element={
+          <ProtectedRoute>
+            <BaseLayout>
+              <UsersList />
             </BaseLayout>
           </ProtectedRoute>
         } />
