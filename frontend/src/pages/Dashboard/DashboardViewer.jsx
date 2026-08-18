@@ -7,7 +7,6 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'
 
 const DashboardViewer = () => {
   const [charts, setCharts] = useState([]);
-  const [recentUsers, setRecentUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,8 +17,7 @@ const DashboardViewer = () => {
           if (Array.isArray(response.data.data)) {
             setCharts(response.data.data);
           } else {
-            setCharts(response.data.data.charts);
-            setRecentUsers(response.data.data.recent_users || []);
+            setCharts(response.data.data.charts || []);
           }
         }
       } catch (error) {
@@ -66,7 +64,7 @@ const DashboardViewer = () => {
             const data = getCleanData(chart.data, y_axis);
 
             return (
-              <div key={chart.id} className="chart-card">
+              <div key={chart.id} className="chart-card" style={chart_type === 'table' ? { gridColumn: '1 / -1' } : {}}>
                 <div className="chart-card-header">
                   <h3>{title}</h3>
                   {description && <p>{description}</p>}
@@ -77,6 +75,23 @@ const DashboardViewer = () => {
                     <div className="chart-error">Error Kueri: {chart.query_error}</div>
                   ) : chart.data && chart.data.length === 0 ? (
                     <div className="chart-empty">Tidak ada data.</div>
+                  ) : chart_type === 'table' ? (
+                    <div className="viewer-table-wrapper" style={{ overflowX: 'auto', maxHeight: '400px' }}>
+                      <table className="viewer-table" style={{ width: '100%' }}>
+                        <thead>
+                          <tr>
+                            {Object.keys(chart.data[0]).map(col => <th key={col}>{col}</th>)}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {chart.data.map((row, idx) => (
+                            <tr key={idx}>
+                              {Object.keys(chart.data[0]).map(col => <td key={`${idx}-${col}`}>{row[col] !== null ? String(row[col]) : <em>null</em>}</td>)}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   ) : (
                     <ResponsiveContainer width="100%" height={300}>
                       {chart_type === 'bar' && (
@@ -116,36 +131,6 @@ const DashboardViewer = () => {
           })}
         </div>
       )}
-
-      {/* Log Pendaftaran User */}
-      <div className="viewer-log-section" style={{ marginTop: '3rem' }}>
-        <h2 style={{ fontSize: '1.25rem', color: '#1f2937', marginBottom: '1rem' }}>Log Aktivitas: Pendaftaran User Terbaru</h2>
-        <div className="viewer-table-wrapper">
-          <table className="viewer-table">
-            <thead>
-              <tr>
-                <th>Nama User</th>
-                <th>Hak Akses (Role)</th>
-                <th>Waktu Dibuat</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentUsers.map(u => (
-                <tr key={u.id}>
-                  <td>{u.name}</td>
-                  <td><span style={{ backgroundColor: '#e0e7ff', color: '#4f46e5', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>{u.role}</span></td>
-                  <td style={{ color: '#6b7280' }}>{u.joined_at}</td>
-                </tr>
-              ))}
-              {recentUsers.length === 0 && (
-                <tr>
-                  <td colSpan="3" style={{ textAlign: 'center', color: '#9ca3af' }}>Belum ada log aktivitas.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 };

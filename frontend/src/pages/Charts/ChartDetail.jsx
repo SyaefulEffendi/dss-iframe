@@ -266,20 +266,25 @@ const ChartDetail = () => {
                 <option value="bar">Bar Chart</option>
                 <option value="pie">Pie Chart</option>
                 <option value="line">Line Chart</option>
+                <option value="table">Table (Log Data)</option>
               </select>
             </div>
-            <div className="config-group">
-              <label>Sumbu X (Label)</label>
-              <select className="config-select" value={editData.x_axis} onChange={(e) => setEditData({...editData, x_axis: e.target.value})}>
-                {getColumns().map(col => <option key={col} value={col}>{col}</option>)}
-              </select>
-            </div>
-            <div className="config-group">
-              <label>Sumbu Y (Nilai)</label>
-              <select className="config-select" value={editData.y_axis} onChange={(e) => setEditData({...editData, y_axis: e.target.value})}>
-                {getColumns().map(col => <option key={col} value={col}>{col}</option>)}
-              </select>
-            </div>
+            {editData.chart_type !== 'table' && (
+              <>
+                <div className="config-group">
+                  <label>Sumbu X (Label)</label>
+                  <select className="config-select" value={editData.x_axis} onChange={(e) => setEditData({...editData, x_axis: e.target.value})}>
+                    {getColumns().map(col => <option key={col} value={col}>{col}</option>)}
+                  </select>
+                </div>
+                <div className="config-group">
+                  <label>Sumbu Y (Nilai)</label>
+                  <select className="config-select" value={editData.y_axis} onChange={(e) => setEditData({...editData, y_axis: e.target.value})}>
+                    {getColumns().map(col => <option key={col} value={col}>{col}</option>)}
+                  </select>
+                </div>
+              </>
+            )}
           </div>
           
           <div className="config-group" style={{ marginTop: '1rem' }}>
@@ -321,6 +326,25 @@ const ChartDetail = () => {
       <div className="visualization-card">
         {chart.query_error ? (
           <div style={{ color: 'red' }}>Error Kueri: {chart.query_error}</div>
+        ) : currentChartType === 'table' ? (
+          <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '500px' }}>
+            <table className="results-table" style={{ width: '100%' }}>
+              <thead>
+                <tr>
+                  {getColumns().map((col) => <th key={col}>{col}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {chart.data.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {getColumns().map((col) => (
+                      <td key={`${rowIndex}-${col}`}>{row[col] !== null ? String(row[col]) : <em>null</em>}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <ResponsiveContainer width="100%" height={500}>
             {currentChartType === 'bar' && (

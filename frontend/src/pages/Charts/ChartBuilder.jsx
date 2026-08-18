@@ -106,7 +106,7 @@ const ChartBuilder = () => {
       description,
       raw_query: query,
       chart_type: chartType,
-      config: { x_axis: xAxis, y_axis: yAxis },
+      config: chartType === 'table' ? {} : { x_axis: xAxis, y_axis: yAxis },
       role_ids: selectedRoles
     };
 
@@ -230,32 +230,37 @@ const ChartBuilder = () => {
                   <option value="bar">Bar Chart</option>
                   <option value="pie">Pie Chart</option>
                   <option value="line">Line Chart</option>
+                  <option value="table">Table (Log Data)</option>
                 </select>
               </div>
 
-              <div className="config-group">
-                <label>X-Axis (Label/Kategori)</label>
-                <select className="config-select" value={xAxis} onChange={(e) => setXAxis(e.target.value)}>
-                  <option value="">Pilih Kolom...</option>
-                  {getColumns().map(col => (
-                    <option key={col} value={col}>{col}</option>
-                  ))}
-                </select>
-              </div>
+              {chartType !== 'table' && (
+                <>
+                  <div className="config-group">
+                    <label>X-Axis (Label/Kategori)</label>
+                    <select className="config-select" value={xAxis} onChange={(e) => setXAxis(e.target.value)}>
+                      <option value="">Pilih Kolom...</option>
+                      {getColumns().map(col => (
+                        <option key={col} value={col}>{col}</option>
+                      ))}
+                    </select>
+                  </div>
 
-              <div className="config-group">
-                <label>Y-Axis (Nilai Numerik)</label>
-                <select className="config-select" value={yAxis} onChange={(e) => setYAxis(e.target.value)}>
-                  <option value="">Pilih Kolom...</option>
-                  {getColumns().map(col => (
-                    <option key={col} value={col}>{col}</option>
-                  ))}
-                </select>
-              </div>
+                  <div className="config-group">
+                    <label>Y-Axis (Nilai Numerik)</label>
+                    <select className="config-select" value={yAxis} onChange={(e) => setYAxis(e.target.value)}>
+                      <option value="">Pilih Kolom...</option>
+                      {getColumns().map(col => (
+                        <option key={col} value={col}>{col}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
 
               <button 
                 className="save-chart-btn" 
-                disabled={!xAxis || !yAxis}
+                disabled={chartType !== 'table' && (!xAxis || !yAxis)}
                 onClick={() => setShowModal(true)}
               >
                 <Save size={18} />
@@ -263,9 +268,27 @@ const ChartBuilder = () => {
               </button>
             </div>
 
-            <div className="preview-container">
+            <div className="preview-container" style={chartType === 'table' ? { overflowX: 'auto', overflowY: 'auto' } : {}}>
               <h3 className="preview-title">Live Preview</h3>
-              {xAxis && yAxis ? (
+              
+              {chartType === 'table' ? (
+                <table className="results-table" style={{ marginTop: '1rem', width: '100%' }}>
+                  <thead>
+                    <tr>
+                      {getColumns().map((col) => <th key={col}>{col}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {results.data.map((row, rowIndex) => (
+                      <tr key={rowIndex}>
+                        {getColumns().map((col) => (
+                          <td key={`${rowIndex}-${col}`}>{row[col] !== null ? String(row[col]) : <em>null</em>}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (xAxis && yAxis ? (
                 <ResponsiveContainer width="100%" height={350}>
                   {chartType === 'bar' && (
                     <BarChart data={getCleanData()}>
@@ -313,7 +336,7 @@ const ChartBuilder = () => {
                   <BarChart2 size={48} style={{ opacity: 0.2 }} />
                   <p>Silakan pilih X-Axis dan Y-Axis di sebelah kiri untuk melihat pratinjau grafik.</p>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         )}

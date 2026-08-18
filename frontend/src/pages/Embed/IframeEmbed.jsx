@@ -58,6 +58,27 @@ const IframeEmbed = () => {
       <div style={{ flex: 1, minHeight: 0 }}>
         {chart.data.length === 0 ? (
           <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Tidak ada data.</div>
+        ) : chart_type === 'table' ? (
+          <div style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '100%' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px', fontFamily: 'sans-serif' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f3f4f6', textAlign: 'left' }}>
+                  {Object.keys(chart.data[0]).map(col => <th key={col} style={{ padding: '8px', borderBottom: '1px solid #e5e7eb' }}>{col}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {chart.data.map((row, idx) => (
+                  <tr key={idx}>
+                    {Object.keys(chart.data[0]).map(col => (
+                      <td key={`${idx}-${col}`} style={{ padding: '8px', borderBottom: '1px solid #e5e7eb' }}>
+                        {row[col] !== null ? String(row[col]) : <em>null</em>}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
             {chart_type === 'bar' && (
