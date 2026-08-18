@@ -11,13 +11,13 @@
 
 .roles-title h1 {
   margin: 0 0 0.5rem 0;
-  color: #111827;
+  color: var(--text-dark);
   font-size: 1.8rem;
 }
 
 .roles-title p {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-gray);
 }
 
 .create-btn {
@@ -40,11 +40,11 @@
 }
 
 .roles-card {
-  background-color: white;
+  background-color: var(--bg-white);
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-light);
 }
 
 .roles-table {
@@ -55,15 +55,15 @@
 .roles-table th, .roles-table td {
   padding: 1rem 1.5rem;
   text-align: left;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .roles-table th {
-  background-color: #f9fafb;
+  background-color: var(--bg-light);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #4b5563;
+  color: var(--text-gray);
   font-weight: 600;
 }
 
@@ -107,13 +107,13 @@
 
 /* Modal SM Override & Fixes */
 .modal-content-sm {
-  background-color: white;
+  background-color: var(--bg-white);
   border-radius: 12px;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
   animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
@@ -121,13 +121,13 @@
 
 .modal-content-sm .modal-header {
   padding: 1.5rem 1.5rem 1rem 1.5rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .modal-content-sm .modal-header h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: #111827;
+  color: var(--text-dark);
 }
 
 .modal-content-sm .modal-body {
@@ -147,17 +147,19 @@
 .modal-content-sm .form-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #4b5563;
+  color: var(--text-dark);
 }
 
 .modal-content-sm .form-group input,
 .modal-content-sm .form-group select {
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-light);
   border-radius: 8px;
   outline: none;
   font-family: inherit;
   font-size: 0.95rem;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
 }
 
 .modal-content-sm .form-group input:focus,
@@ -171,17 +173,17 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  background-color: #f9fafb;
-  border-top: 1px solid #f3f4f6;
+  background-color: var(--bg-light);
+  border-top: 1px solid var(--border-light);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   margin: 0;
 }
 
 .modal-content-sm .cancel-btn {
-  background-color: white;
-  color: #4b5563;
-  border: 1px solid #d1d5db;
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+  border: 1px solid var(--border-light);
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   font-weight: 600;
@@ -190,7 +192,7 @@
 }
 
 .modal-content-sm .cancel-btn:hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-light);
 }
 
 .modal-content-sm .submit-btn {

@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Sun, Moon } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
+import { ThemeContext } from '../../context/ThemeContext';
 import './BaseLayout.css';
 
 const Navbar = ({ toggleSidebar }) => {
   const { user } = useContext(AuthContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <header className="navbar">
       <div className="navbar-left">
@@ -17,6 +19,9 @@ const Navbar = ({ toggleSidebar }) => {
       </div>
       
       <div className="navbar-right">
+        <button className="theme-toggle-btn" onClick={toggleTheme} title="Toggle Theme">
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
         <div className="role-badge">{user?.role?.name || 'User'}</div>
         <div className="user-profile">
           <span className="user-name">{user?.name || 'Loading...'}</span>

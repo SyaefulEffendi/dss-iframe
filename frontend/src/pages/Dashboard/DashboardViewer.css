@@ -8,22 +8,22 @@
 
 .viewer-header h1 {
   font-size: 1.5rem;
-  color: #1f2937;
+  color: var(--text-dark);
   margin: 0 0 0.5rem 0;
 }
 
 .viewer-header p {
-  color: #6b7280;
+  color: var(--text-gray);
   margin: 0;
 }
 
 .empty-state {
-  background: white;
+  background: var(--bg-white);
   padding: 3rem;
   border-radius: 8px;
   text-align: center;
-  color: #6b7280;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  color: var(--text-gray);
+  box-shadow: var(--shadow-sm);
 }
 
 .charts-grid {
@@ -33,10 +33,10 @@
 }
 
 .chart-card {
-  background: white;
+  background: var(--bg-white);
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
 }
@@ -47,13 +47,13 @@
 
 .chart-card-header h3 {
   font-size: 1.125rem;
-  color: #1f2937;
+  color: var(--text-dark);
   margin: 0 0 0.25rem 0;
 }
 
 .chart-card-header p {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--text-gray);
   margin: 0;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .chart-empty {
-  color: #9ca3af;
+  color: var(--text-gray);
   font-style: italic;
 }
 
@@ -81,13 +81,13 @@
   align-items: center;
   height: 100vh;
   font-size: 1.25rem;
-  color: #6b7280;
+  color: var(--text-gray);
 }
 
 .viewer-table-wrapper {
-  background: white;
+  background: var(--bg-white);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-sm);
   overflow-x: auto;
 }
 
@@ -99,17 +99,17 @@
 .viewer-table th, .viewer-table td {
   padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .viewer-table th {
-  background-color: #f9fafb;
+  background-color: var(--bg-light);
   font-weight: 600;
-  color: #374151;
+  color: var(--text-dark);
 }
 
 .viewer-table tr:hover {
-  background-color: #f9fafb;
+  background-color: var(--bg-light);
 }
 
 @media (max-width: 768px) {
