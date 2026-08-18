@@ -84,9 +84,25 @@ class DashboardController extends Controller
             return $chart;
         });
 
+        $recentUsers = \App\Models\User::with('role')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function($u) {
+                return [
+                    'id' => $u->id,
+                    'name' => $u->name,
+                    'role' => $u->role ? $u->role->name : '-',
+                    'joined_at' => $u->created_at->diffForHumans()
+                ];
+            });
+
         return response()->json([
             'success' => true,
-            'data' => $chartsData
+            'data' => [
+                'charts' => $chartsData,
+                'recent_users' => $recentUsers
+            ]
         ]);
     }
 }
