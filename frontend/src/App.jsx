@@ -10,74 +10,76 @@ import ChartDetail from './pages/Charts/ChartDetail';
 import IframeEmbed from './pages/Embed/IframeEmbed';
 import RolesList from './pages/Roles/RolesList';
 import UsersList from './pages/Users/UsersList';
+import DashboardViewer from './pages/Dashboard/DashboardViewer';
 import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-      <Routes>
-        {/* Halaman Login berdiri sendiri tanpa BaseLayout */}
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-
-        {/* Halaman lain yang menggunakan Sidebar/Navbar akan diletakkan di dalam rute ini nanti */}
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <BaseLayout>
-              <DashboardAnalyst />
-            </BaseLayout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/charts" element={
-          <ProtectedRoute>
-            <BaseLayout>
-              <ChartsList />
-            </BaseLayout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/chart-builder" element={
-          <ProtectedRoute>
-            <BaseLayout>
-              <ChartBuilder />
-            </BaseLayout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/charts/:id" element={
-          <ProtectedRoute>
-            <BaseLayout>
-              <ChartDetail />
-            </BaseLayout>
-          </ProtectedRoute>
-        } />
-
-        {/* ROLES ROUTE */}
-        <Route path="/roles" element={
-          <ProtectedRoute>
-            <BaseLayout>
-              <RolesList />
-            </BaseLayout>
-          </ProtectedRoute>
-        } />
-
-        {/* USERS ROUTE */}
-        <Route path="/users" element={
-          <ProtectedRoute>
-            <BaseLayout>
-              <UsersList />
-            </BaseLayout>
-          </ProtectedRoute>
-        } />
-        
-        {/* PUBLIC ROUTE FOR IFRAME */}
-        <Route path="/embed/:token" element={<IframeEmbed />} />
-      </Routes>
-    </Router>
+        <AppRoutes />
+      </Router>
     </AuthProvider>
   );
 }
+
+const AppRoutes = () => {
+  const { user } = React.useContext(AuthContext) || {};
+  const isAnalyst = user?.role?.name === 'Data Analyst';
+
+  return (
+    <Routes>
+      {/* Halaman Login berdiri sendiri tanpa BaseLayout */}
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+
+      {/* Dashboard Route */}
+      <Route path="/dashboard" element={
+        <ProtectedRoute>
+          <BaseLayout>
+            {isAnalyst ? <DashboardAnalyst /> : <DashboardViewer />}
+          </BaseLayout>
+        </ProtectedRoute>
+      } />
+
+      {/* Restricted Routes for Analyst Only */}
+      {isAnalyst && (
+        <>
+          <Route path="/charts" element={
+            <ProtectedRoute>
+              <BaseLayout><ChartsList /></BaseLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/chart-builder" element={
+            <ProtectedRoute>
+              <BaseLayout><ChartBuilder /></BaseLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/charts/:id" element={
+            <ProtectedRoute>
+              <BaseLayout><ChartDetail /></BaseLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/roles" element={
+            <ProtectedRoute>
+              <BaseLayout><RolesList /></BaseLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/users" element={
+            <ProtectedRoute>
+              <BaseLayout><UsersList /></BaseLayout>
+            </ProtectedRoute>
+          } />
+        </>
+      )}
+      
+      {/* PUBLIC ROUTE FOR IFRAME */}
+      <Route path="/embed/:token" element={<IframeEmbed />} />
+
+      {/* Fallback Catch-All Route (Akan otomatis dialihkan ke /dashboard atau /login) */}
+      <Route path="*" element={<ProtectedRoute><BaseLayout>{isAnalyst ? <DashboardAnalyst /> : <DashboardViewer />}</BaseLayout></ProtectedRoute>} />
+    </Routes>
+  );
+};
 
 export default App;

@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Dashboard
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
+    Route::get('/dashboard/viewer', [DashboardController::class, 'viewerDashboard']);
 
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);

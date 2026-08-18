@@ -8,8 +8,16 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    private function requireAnalyst()
+    {
+        if (request()->user()->role->name !== 'Data Analyst') {
+            abort(403, 'Akses ditolak: Hanya Data Analyst yang memiliki izin.');
+        }
+    }
+
     public function index()
     {
+        $this->requireAnalyst();
         // Get all users with their roles, ordered by latest
         $users = User::with('role')->orderBy('created_at', 'desc')->get();
         return response()->json([
@@ -20,6 +28,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $this->requireAnalyst();
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -43,6 +52,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->requireAnalyst();
         $user = User::findOrFail($id);
 
         $request->validate([
@@ -72,6 +82,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $this->requireAnalyst();
         $user = User::findOrFail($id);
         
         // Prevent deleting oneself

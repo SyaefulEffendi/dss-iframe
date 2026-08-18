@@ -5,8 +5,10 @@ import { AuthContext } from '../../context/AuthContext';
 import './BaseLayout.css';
 
 const Sidebar = () => {
-  const { logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  const isAnalyst = user?.role?.name === 'Data Analyst';
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -31,24 +33,28 @@ const Sidebar = () => {
               <span>Dashboard</span>
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/charts" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
-              <BarChart2 size={20} />
-              <span>Charts</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/users" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
-              <Users size={20} />
-              <span>Users</span>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/roles" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
-              <ShieldCheck size={20} />
-              <span>Roles</span>
-            </NavLink>
-          </li>
+          {isAnalyst && (
+            <>
+              <li>
+                <NavLink to="/charts" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
+                  <BarChart2 size={20} />
+                  <span>Charts</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/users" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
+                  <Users size={20} />
+                  <span>Users</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/roles" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
+                  <ShieldCheck size={20} />
+                  <span>Roles</span>
+                </NavLink>
+              </li>
+            </>
+          )}
           <li>
             <NavLink to="/settings" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
               <Settings size={20} />

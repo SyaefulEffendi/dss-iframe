@@ -9,11 +9,19 @@ use App\Services\QueryRunnerService;
 
 class ChartController extends Controller
 {
+    private function requireAnalyst()
+    {
+        if (request()->user()->role->name !== 'Data Analyst') {
+            abort(403, 'Akses ditolak: Hanya Data Analyst yang memiliki izin.');
+        }
+    }
+
     /**
      * Display a listing of the charts.
      */
     public function index(Request $request)
     {
+        $this->requireAnalyst();
         // For MVP, we simply return all charts with their creator's name.
         // We order by latest created first.
         $charts = Chart::with('creator:id,name')
@@ -31,6 +39,7 @@ class ChartController extends Controller
      */
     public function destroy($id)
     {
+        $this->requireAnalyst();
         $chart = Chart::find($id);
 
         if (!$chart) {
@@ -53,6 +62,7 @@ class ChartController extends Controller
      */
     public function runQuery(Request $request, QueryRunnerService $queryRunner)
     {
+        $this->requireAnalyst();
         $request->validate([
             'query' => 'required|string'
         ]);
@@ -78,6 +88,7 @@ class ChartController extends Controller
      */
     public function store(Request $request)
     {
+        $this->requireAnalyst();
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -112,6 +123,7 @@ class ChartController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->requireAnalyst();
         $chart = Chart::find($id);
 
         if (!$chart) {
@@ -150,6 +162,7 @@ class ChartController extends Controller
      */
     public function show($id, QueryRunnerService $queryRunner)
     {
+        $this->requireAnalyst();
         $chart = Chart::with('roles', 'creator')->find($id);
 
         if (!$chart) {
@@ -176,6 +189,7 @@ class ChartController extends Controller
      */
     public function generateToken($id)
     {
+        $this->requireAnalyst();
         $chart = Chart::find($id);
 
         if (!$chart) {

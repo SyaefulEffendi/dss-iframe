@@ -54,4 +54,39 @@ class DashboardController extends Controller
             ]
         ]);
     }
+
+    public function viewerDashboard(Request $request, \App\Services\QueryRunnerService $queryRunner)
+    {
+        $user = $request->user();
+
+        if (!$user->role_id) {
+            return response()->json([
+                'success' => true,
+                'data' => []
+            ]);
+        }
+
+        // Get charts allowed for this user's role
+        $charts = Chart::with('roles')
+            ->whereHas('roles', function($q) use ($user) {
+                $q->where('roles.id', $user->role_id);
+            })->get();
+
+        // Execute queries for each chart
+        $chartsData = $charts->map(function ($chart) use ($queryRunner) {
+            try {
+                $results = $queryRunner->runQuery($chart->raw_query);
+                $chart->data = $results;
+            } catch (\Exception $e) {
+                $chart->data = [];
+                $chart->query_error = $e->getMessage();
+            }
+            return $chart;
+        });
+
+        return response()->json([
+            'success' => true,
+            'data' => $chartsData
+        ]);
+    }
 }
