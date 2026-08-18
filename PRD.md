@@ -2,7 +2,7 @@
 
 **Tujuan Dokumen:** Menjadi blueprint (panduan utama) bagi Developer dan AI Agent (Antigravity/dll) dalam membangun aplikasi.
 
-**Changelog dari v1:** Menambahkan detail teknis untuk Query Runner (timeout/row limit), memperjelas konsep Dashboard (otomatis, bukan custom), memperjelas mekanisme Iframe Embedding (token statis + regenerate), menambahkan user story RBAC CRUD, strategi caching, audit log, dan testing strategy.
+**Changelog dari v2:** Menambahkan mode *Hybrid Chart Builder* (GUI ala Metabase + SQL Editor), fitur Manajemen Profil & Reset Password, dan kebijakan *Strict Visual Analytics* (tanpa Tabel Log).
 
 ---
 
@@ -63,19 +63,16 @@ Tujuan dari project ini adalah:
 - Sistem harus memiliki fitur login multi-user.
 - Sistem harus bisa membuat, mengedit, dan menghapus *Role* (Contoh: CEO, Manager HR, Manager IT, Data Analis).
 - Sistem harus bisa mengelola daftar pengguna dan memasukkan mereka ke dalam *Role* tertentu.
-- Pada MVP, hak untuk mengelola Role & User melekat pada akun dengan role "Data Analis"/Admin — belum ada role "Super Admin" terpisah (dicatat sebagai potensi *out of scope* item, lihat Bab 7).
+- **[BARU] Profil & Keamanan:** Pengguna dapat mengelola profil mereka (Nama, Email, Foto). Perubahan email dilindungi konfirmasi *password*, dan fitur *Reset Password* dikirim melalui tautan email demi standar keamanan tinggi.
+- Pada MVP, hak untuk mengelola Role & User melekat pada akun dengan role "Data Analis"/Admin — belum ada role "Super Admin" terpisah.
 
-**5.2. Modul Query Runner (Data Analis)**
-- Sistem harus menyediakan antarmuka text editor bagi Data Analis untuk menulis *query* SQL mentah.
-- Sistem harus dapat mengeksekusi *query* tersebut ke database target melalui koneksi terpisah (`DB_CONNECTION_READONLY`) dengan privilege hanya `SELECT`.
-- **[BARU] Query Timeout:** Eksekusi query pada mode preview maupun saat dashboard fetch data wajib dibatasi timeout (rekomendasi default: 10 detik). Query yang melebihi batas waktu di-*kill* dan mengembalikan pesan error yang jelas ke user.
-- **[BARU] Row Limit:** Preview hasil query pada Query Runner dibatasi maksimal 100 baris (dengan indikator "menampilkan 100 dari total N baris" bila hasil aktual lebih banyak). Batas ini tidak mengubah `raw_query` yang tersimpan — hanya membatasi tampilan preview di UI.
-- Sistem harus menampilkan pratinjau (preview) data dalam bentuk tabel dari hasil eksekusi *query*.
-
-**5.3. Modul Chart Builder (Data Analis)**
-- Sistem harus menyediakan opsi pemilihan tipe visualisasi grafik (minimal: *Bar Chart, Pie Chart, Line Chart*).
-- Sistem harus memungkinkan pengguna memetakan kolom hasil *query* ke dalam sumbu X dan Y pada grafik.
-- Sistem harus menyediakan pratinjau grafik secara *real-time* sebelum disimpan.
+**5.2. Modul Chart Builder (Hybrid Mode: GUI & SQL)**
+- Sistem menyediakan 2 metode perakitan grafik untuk Data Analis:
+  1. **GUI Builder (No-Code):** Mengadopsi standar Metabase, pengguna memilih Tabel, Sumbu X, Fungsi Agregasi, dan Sumbu Y melalui antarmuka visual. Sistem merakit SQL secara otomatis. Digunakan untuk *single-table query* cepat.
+  2. **SQL Editor:** Editor teks klasik untuk mengeksekusi *raw query* kompleks (misalnya yang membutuhkan `JOIN` antar tabel).
+- Sistem mengeksekusi *query* melalui koneksi terpisah (`DB_CONNECTION_READONLY`) dengan hak akses `SELECT`.
+- **Query Timeout & Row Limit:** Eksekusi dibatasi *timeout* (default: 10 detik) dan UI *Data Preview* dibatasi maksimal 100 baris.
+- **Strict Visual Analytics:** Sistem ini secara eksklusif hanya melayani tipe visualisasi (Bar, Pie, Line) tanpa mencampuradukkan dengan tipe "Log Tabel", guna menjaga *dashboard* eksekutif tetap bersih dan fokus pada ringkasan data.
 
 **5.4. Modul Dashboard Otomatis & Akses Grafik**
 - Sistem harus memiliki form untuk menyimpan grafik beserta judul dan deskripsinya.
@@ -174,6 +171,8 @@ dss-project/
 - **Inisialisasi Data (Seeder):** Otomatisasi pembuatan akun utama pertama kali menggunakan kredensial email spesifik mahasiswa (`mohsyaefuleffendi@student.uns.ac.id`) dengan *role* Data Analyst, agar pengujian aplikasi dapat langsung dilakukan pasca-migrasi.
 - **Mengapa Docker?** Mengadopsi keunggulan Metabase. Dengan Docker, *environment* aplikasi terisolasi dengan rapi. Kontributor atau AI tidak perlu mengurus versi PHP atau Node.js lokal, cukup `docker-compose up`.
 - **Database Query Runner terpisah:** Untuk keamanan, eksekusi *raw query* dari Data Analis akan diarahkan ke koneksi database (`DB_CONNECTION_READONLY`) yang user-nya hanya diberi *privilege* `SELECT`, dilengkapi timeout dan row limit untuk mencegah *resource exhaustion*.
+- **Penyederhanaan Sistem (No Table Logs):** Diputuskan untuk mencabut fitur "Table Chart" atau "Data Logs" di *Dashboard*. Pengguna eksekutif hanya butuh melihat visualisasi akhir. Jika Data Analis butuh melihat data mentah, mereka dapat melihatnya di mode *Data Preview* saat di *Chart Builder*.
+- **Metabase-Style GUI:** Pengembangan *GUI Builder* memanfaatkan fitur `Schema::getTables()` dan `Schema::getColumns()` dari sisi Laravel untuk memetakan struktur *database* ke *frontend* ReactJS secara dinamis, tanpa perlu migrasi *schema* tambahan.
 - **Mengapa Dashboard otomatis, bukan custom?** Menyederhanakan MVP — Data Analis cukup fokus assign role per chart, tanpa perlu langkah tambahan menyusun tata letak dashboard. Ini juga meniru pola *permission-based visibility* yang sering dipakai tool BI enterprise.
 - **Mengapa Iframe pakai token statis (bukan expiry otomatis) di MVP?** Menyederhanakan implementasi awal sambil tetap aman — token acak sulit ditebak, dan mekanisme regenerate manual sudah cukup untuk mitigasi risiko kebocoran pada tahap MVP. Expiry otomatis/berbasis waktu dapat ditambahkan di iterasi berikutnya.
 
