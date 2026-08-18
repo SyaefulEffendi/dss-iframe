@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BarChart2, Users, ShieldCheck, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, BarChart2, Users, ShieldCheck, Settings, LogOut, Database } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
 import './BaseLayout.css';
 
@@ -39,6 +39,12 @@ const Sidebar = () => {
                 <NavLink to="/charts" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
                   <BarChart2 size={20} />
                   <span>Charts</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/data-explorer" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'}>
+                  <Database size={20} />
+                  <span>Data Explorer</span>
                 </NavLink>
               </li>
               <li>

@@ -1,0 +1,248 @@
+.data-explorer-container {
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.explorer-header {
+    margin-bottom: 24px;
+}
+
+.explorer-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.explorer-header h2 i {
+    color: #4f46e5;
+}
+
+.explorer-header p {
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.explorer-layout {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.explorer-sidebar {
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #9ca3af;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.table-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+}
+
+.table-item {
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #4b5563;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.table-item i {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.table-item:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.table-item.active {
+    background-color: #e0e7ff;
+    color: #4f46e5;
+}
+
+.table-item.active i {
+    color: #4f46e5;
+}
+
+/* Main Content */
+.explorer-main {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.empty-data-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6b7280;
+    padding: 40px;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 48px;
+    color: #e5e7eb;
+    margin-bottom: 16px;
+}
+
+.empty-data-state h3 {
+    color: #374151;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.data-preview-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.preview-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9fafb;
+}
+
+.preview-header h3 {
+    font-size: 16px;
+    color: #374151;
+    margin: 0;
+}
+
+.preview-header h3 span {
+    color: #4f46e5;
+    font-weight: 700;
+}
+
+.badge-count {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.table-responsive-wrapper {
+    flex: 1;
+    overflow: auto;
+    padding: 0;
+}
+
+.explorer-table {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    width: max-content;
+    min-width: 100%;
+}
+
+.explorer-table th {
+    position: sticky;
+    top: 0;
+    background-color: #f3f4f6;
+    z-index: 1;
+}
+
+.explorer-table td, .explorer-table th {
+    white-space: nowrap;
+    padding: 12px 16px;
+}
+
+.null-val {
+    color: #9ca3af;
+    font-style: italic;
+    font-size: 12px;
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.loading-data-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    color: #6b7280;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #4f46e5;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.no-data-msg {
+    padding: 40px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.no-data-msg i {
+    margin-right: 8px;
+    color: #9ca3af;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .explorer-layout {
+        flex-direction: column;
+    }
+    
+    .explorer-sidebar {
+        width: 100%;
+        max-height: 250px;
+    }
+}

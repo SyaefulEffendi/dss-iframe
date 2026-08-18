@@ -15,6 +15,7 @@ import DashboardViewer from './pages/Dashboard/DashboardViewer';
 import Settings from './pages/Settings/Settings';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
+import DataExplorer from './pages/DataExplorer/DataExplorer';
 import './App.css';
 
 function App() {
@@ -64,6 +65,11 @@ const AppRoutes = () => {
           <Route path="/charts/:id" element={
             <ProtectedRoute>
               <BaseLayout><ChartDetail /></BaseLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/data-explorer" element={
+            <ProtectedRoute>
+              <BaseLayout><DataExplorer /></BaseLayout>
             </ProtectedRoute>
           } />
           <Route path="/roles" element={

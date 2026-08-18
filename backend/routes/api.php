@@ -24,9 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Settings
     Route::post('/settings/profile', [SettingsController::class, 'updateProfile']);
 
-    // Schema Explorer (for GUI Builder)
+    // Schema Information (For GUI Builder & Data Explorer)
     Route::get('/schema/tables', [SchemaController::class, 'getTables']);
     Route::get('/schema/columns/{table}', [SchemaController::class, 'getColumns']);
+    Route::get('/schema/preview/{table}', [SchemaController::class, 'previewTable']);
 
     // Dashboard
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class SchemaController extends Controller
 {
@@ -66,6 +67,43 @@ class SchemaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch columns: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Preview raw data from a specific table (Limit 100).
+     */
+    public function previewTable($table)
+    {
+        try {
+            // Security check: Block system tables
+            $systemTables = ['migrations', 'personal_access_tokens', 'password_reset_tokens', 'failed_jobs', 'jobs', 'job_batches', 'sessions', 'cache', 'cache_locks'];
+            if (in_array($table, $systemTables)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access denied to system tables'
+                ], 403);
+            }
+
+            if (!Schema::hasTable($table)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Table not found'
+                ], 404);
+            }
+
+            // Fetch top 100 rows
+            $data = DB::table($table)->limit(100)->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to preview table: ' . $e->getMessage()
             ], 500);
         }
     }
