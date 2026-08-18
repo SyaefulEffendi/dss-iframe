@@ -31,6 +31,7 @@ const ChartBuilder = () => {
   const [description, setDescription] = useState('');
   const [roles, setRoles] = useState([]);
   const [selectedRoles, setSelectedRoles] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch Roles for Modal
   useEffect(() => {
@@ -98,6 +99,8 @@ const ChartBuilder = () => {
       return;
     }
 
+    setIsSaving(true);
+
     const payload = {
       title,
       description,
@@ -115,6 +118,8 @@ const ChartBuilder = () => {
       }
     } catch (err) {
       MySwal.fire('Gagal', err.response?.data?.message || 'Terjadi kesalahan.', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -354,8 +359,10 @@ const ChartBuilder = () => {
             </div>
 
             <div className="modal-actions">
-              <button className="cancel-btn" onClick={() => setShowModal(false)}>Batal</button>
-              <button className="submit-btn" onClick={handleSaveChart}>Simpan Data</button>
+              <button className="cancel-btn" onClick={() => setShowModal(false)} disabled={isSaving}>Batal</button>
+              <button className="submit-btn" onClick={handleSaveChart} disabled={isSaving}>
+                {isSaving ? 'Menyimpan...' : 'Simpan Data'}
+              </button>
             </div>
           </div>
         </div>
