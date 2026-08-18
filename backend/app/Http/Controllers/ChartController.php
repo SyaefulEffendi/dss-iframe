@@ -71,4 +71,38 @@ class ChartController extends Controller
             ], 400); // Bad Request
         }
     }
+
+    /**
+     * Store a newly created chart in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'raw_query' => 'required|string',
+            'chart_type' => 'required|in:bar,pie,line',
+            'config' => 'required|array', // JSON containing x_axis, y_axis, etc.
+            'role_ids' => 'required|array', // Array of Role IDs
+            'role_ids.*' => 'exists:roles,id'
+        ]);
+
+        $chart = new Chart();
+        $chart->title = $request->title;
+        $chart->description = $request->description;
+        $chart->raw_query = $request->raw_query;
+        $chart->chart_type = $request->chart_type;
+        $chart->config = $request->config;
+        $chart->creator_id = $request->user()->id; // Sanctum user
+        $chart->save();
+
+        // Sync roles via the pivot table
+        $chart->roles()->sync($request->role_ids);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Grafik berhasil disimpan!',
+            'data' => $chart
+        ], 201);
+    }
 }
