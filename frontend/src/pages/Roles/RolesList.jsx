@@ -108,38 +108,40 @@ const RolesList = () => {
         ) : roles.length === 0 ? (
           <div className="empty-state">Belum ada data jabatan.</div>
         ) : (
-          <table className="roles-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nama Jabatan (Role)</th>
-                <th width="150">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {roles.map((role) => (
-                <tr key={role.id}>
-                  <td>{role.id}</td>
-                  <td>
-                    <div className="role-name-cell">
-                      <Shield size={16} className="role-icon" />
-                      <strong>{role.name}</strong>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="action-btns">
-                      <button className="btn-icon btn-edit" onClick={() => handleOpenModal(role)}>
-                        <Edit2 size={16} />
-                      </button>
-                      <button className="btn-icon btn-delete" onClick={() => handleDelete(role.id)}>
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
+          <div className="table-responsive-wrapper">
+            <table className="roles-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nama Jabatan (Role)</th>
+                  <th width="150">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {roles.map((role) => (
+                  <tr key={role.id}>
+                    <td>{role.id}</td>
+                    <td>
+                      <div className="role-name-cell">
+                        <Shield size={16} className="role-icon" />
+                        <strong>{role.name}</strong>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="action-btns">
+                        <button className="btn-icon btn-edit" onClick={() => handleOpenModal(role)}>
+                          <Edit2 size={16} />
+                        </button>
+                        <button className="btn-icon btn-delete" onClick={() => handleDelete(role.id)}>
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

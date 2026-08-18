@@ -134,46 +134,48 @@ const UsersList = () => {
         ) : users.length === 0 ? (
           <div className="empty-state">Belum ada data pengguna.</div>
         ) : (
-          <table className="roles-table">
-            <thead>
-              <tr>
-                <th>Pengguna</th>
-                <th>Email</th>
-                <th>Jabatan (Role)</th>
-                <th width="150">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <div className="role-name-cell">
-                      <UserCircle size={24} className="role-icon" style={{ color: '#6366f1' }}/>
-                      <strong>{user.name}</strong>
-                    </div>
-                  </td>
-                  <td>{user.email}</td>
-                  <td>
-                    {user.role ? (
-                      <span className="badge-role">{user.role.name}</span>
-                    ) : (
-                      <span style={{ color: '#9ca3af', fontStyle: 'italic', fontSize: '0.85rem' }}>Tidak Ada Jabatan</span>
-                    )}
-                  </td>
-                  <td>
-                    <div className="action-btns">
-                      <button className="btn-icon btn-edit" onClick={() => handleOpenModal(user)}>
-                        <Edit2 size={16} />
-                      </button>
-                      <button className="btn-icon btn-delete" onClick={() => handleDelete(user.id)}>
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
+          <div className="table-responsive-wrapper">
+            <table className="roles-table">
+              <thead>
+                <tr>
+                  <th>Pengguna</th>
+                  <th>Email</th>
+                  <th>Jabatan (Role)</th>
+                  <th width="150">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id}>
+                    <td>
+                      <div className="role-name-cell">
+                        <UserCircle size={24} className="role-icon" style={{ color: '#6366f1' }}/>
+                        <strong>{user.name}</strong>
+                      </div>
+                    </td>
+                    <td>{user.email}</td>
+                    <td>
+                      {user.role ? (
+                        <span className="badge-role">{user.role.name}</span>
+                      ) : (
+                        <span style={{ color: '#9ca3af', fontStyle: 'italic', fontSize: '0.85rem' }}>Tidak Ada Jabatan</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="action-btns">
+                        <button className="btn-icon btn-edit" onClick={() => handleOpenModal(user)}>
+                          <Edit2 size={16} />
+                        </button>
+                        <button className="btn-icon btn-delete" onClick={() => handleDelete(user.id)}>
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

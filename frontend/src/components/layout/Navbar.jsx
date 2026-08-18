@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
+import { Menu } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
 import './BaseLayout.css';
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const { user } = useContext(AuthContext);
   return (
     <header className="navbar">
       <div className="navbar-left">
+        <button className="mobile-menu-btn" onClick={toggleSidebar}>
+          <Menu size={24} />
+        </button>
         <span className="breadcrumb-path">Dashboard</span>
         <span className="breadcrumb-separator">&gt;</span>
         <span className="breadcrumb-current">Overview</span>
