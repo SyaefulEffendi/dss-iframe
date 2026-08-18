@@ -64,7 +64,7 @@ const DashboardViewer = () => {
             const data = getCleanData(chart.data, y_axis);
 
             return (
-              <div key={chart.id} className="chart-card" style={chart_type === 'table' ? { gridColumn: '1 / -1' } : {}}>
+              <div key={chart.id} className="chart-card">
                 <div className="chart-card-header">
                   <h3>{title}</h3>
                   {description && <p>{description}</p>}
@@ -75,23 +75,6 @@ const DashboardViewer = () => {
                     <div className="chart-error">Error Kueri: {chart.query_error}</div>
                   ) : chart.data && chart.data.length === 0 ? (
                     <div className="chart-empty">Tidak ada data.</div>
-                  ) : chart_type === 'table' ? (
-                    <div className="viewer-table-wrapper" style={{ overflowX: 'auto', maxHeight: '400px' }}>
-                      <table className="viewer-table" style={{ width: '100%' }}>
-                        <thead>
-                          <tr>
-                            {Object.keys(chart.data[0]).map(col => <th key={col}>{col}</th>)}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {chart.data.map((row, idx) => (
-                            <tr key={idx}>
-                              {Object.keys(chart.data[0]).map(col => <td key={`${idx}-${col}`}>{row[col] !== null ? String(row[col]) : <em>null</em>}</td>)}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
                   ) : (
                     <ResponsiveContainer width="100%" height={300}>
                       {chart_type === 'bar' && (
