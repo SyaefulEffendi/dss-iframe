@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Plus, Edit2, Trash2, UserCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, UserCircle, Eye, EyeOff } from 'lucide-react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import './UsersList.css'; // Kita bisa gunakan styling yang mirip dengan Roles
@@ -16,6 +16,7 @@ const UsersList = () => {
   const [editUser, setEditUser] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', password: '', role_id: '' });
   const [isSaving, setIsSaving] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -62,6 +63,7 @@ const UsersList = () => {
     setShowModal(false);
     setEditUser(null);
     setFormData({ name: '', email: '', password: '', role_id: '' });
+    setShowPassword(false);
   };
 
   const handleSubmit = async (e) => {
@@ -199,7 +201,34 @@ const UsersList = () => {
               </div>
               <div className="form-group">
                 <label>Password {editUser && <span style={{ color: '#9ca3af', fontWeight: 'normal' }}>(Kosongkan jika tidak ingin diubah)</span>}</label>
-                <input type="password" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
+                <div style={{ position: 'relative' }}>
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    value={formData.password} 
+                    onChange={(e) => setFormData({...formData, password: e.target.value})} 
+                    style={{ width: '100%', paddingRight: '2.5rem', boxSizing: 'border-box' }}
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ 
+                      position: 'absolute', 
+                      right: '0.75rem', 
+                      top: '50%', 
+                      transform: 'translateY(-50%)', 
+                      background: 'none', 
+                      border: 'none', 
+                      cursor: 'pointer', 
+                      color: '#9ca3af',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 0
+                    }}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
               <div className="modal-actions" style={{ marginTop: '1.5rem' }}>
                 <button type="button" className="cancel-btn" onClick={handleCloseModal} disabled={isSaving}>Batal</button>
