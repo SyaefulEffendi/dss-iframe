@@ -1,5 +1,6 @@
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login/Login';
 import BaseLayout from './components/layout/BaseLayout';
@@ -24,7 +25,7 @@ function App() {
 }
 
 const AppRoutes = () => {
-  const { user } = React.useContext(AuthContext) || {};
+  const { user } = useContext(AuthContext) || {};
   const isAnalyst = user?.role?.name === 'Data Analyst';
 
   return (
