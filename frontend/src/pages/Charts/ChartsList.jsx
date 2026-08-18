@@ -148,7 +148,11 @@ const ChartsList = () => {
                   <td>{formatDate(chart.created_at)}</td>
                   <td>
                     <div className="action-btns">
-                      <button className="btn-icon btn-edit" title="Edit Grafik">
+                      <button 
+                        className="btn-icon btn-edit" 
+                        title="Detail & Token Grafik"
+                        onClick={() => navigate(`/charts/${chart.id}`)}
+                      >
                         <Edit2 size={16} />
                       </button>
                       <button 

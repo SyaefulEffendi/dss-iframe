@@ -6,6 +6,8 @@ import BaseLayout from './components/layout/BaseLayout';
 import DashboardAnalyst from './pages/Dashboard/DashboardAnalyst';
 import ChartsList from './pages/Charts/ChartsList';
 import ChartBuilder from './pages/Charts/ChartBuilder';
+import ChartDetail from './pages/Charts/ChartDetail';
+import IframeEmbed from './pages/Embed/IframeEmbed';
 import './App.css';
 
 function App() {
@@ -41,6 +43,17 @@ function App() {
             </BaseLayout>
           </ProtectedRoute>
         } />
+
+        <Route path="/charts/:id" element={
+          <ProtectedRoute>
+            <BaseLayout>
+              <ChartDetail />
+            </BaseLayout>
+          </ProtectedRoute>
+        } />
+        
+        {/* PUBLIC ROUTE FOR IFRAME */}
+        <Route path="/embed/:token" element={<IframeEmbed />} />
       </Routes>
     </Router>
     </AuthProvider>

@@ -8,6 +8,9 @@ use App\Http\Controllers\RoleController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+// Public Embed Route
+Route::get('/public/charts/{token}', [ChartController::class, 'getChartByToken']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -18,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Charts
     Route::get('/charts', [ChartController::class, 'index']);
     Route::post('/charts', [ChartController::class, 'store']);
+    Route::get('/charts/{id}', [ChartController::class, 'show']);
+    Route::post('/charts/{id}/token', [ChartController::class, 'generateToken']);
     Route::post('/charts/run-query', [ChartController::class, 'runQuery']);
     Route::delete('/charts/{id}', [ChartController::class, 'destroy']);
 });
