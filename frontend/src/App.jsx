@@ -16,6 +16,7 @@ import Settings from './pages/Settings/Settings';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
 import DataExplorer from './pages/DataExplorer/DataExplorer';
+import NotFound from './pages/NotFound/NotFound';
 import './App.css';
 
 function App() {
@@ -95,8 +96,8 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
 
-      {/* Fallback Catch-All Route (Akan otomatis dialihkan ke /dashboard atau /login) */}
-      <Route path="*" element={<ProtectedRoute><BaseLayout>{isAnalyst ? <DashboardAnalyst /> : <DashboardViewer />}</BaseLayout></ProtectedRoute>} />
+      {/* Fallback Catch-All Route (404 Not Found) */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
