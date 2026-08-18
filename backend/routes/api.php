@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SchemaController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
@@ -22,6 +23,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Settings
     Route::post('/settings/profile', [SettingsController::class, 'updateProfile']);
+
+    // Schema Explorer (for GUI Builder)
+    Route::get('/schema/tables', [SchemaController::class, 'getTables']);
+    Route::get('/schema/columns/{table}', [SchemaController::class, 'getColumns']);
 
     // Dashboard
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);

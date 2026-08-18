@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, ArrowLeft, Database, AlertCircle, Save, X, BarChart2 } from 'lucide-react';
+import { Play, ArrowLeft, Database, AlertCircle, Save, X, BarChart2, MousePointer2, Terminal } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -15,7 +15,22 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'
 
 const ChartBuilder = () => {
   const navigate = useNavigate();
-  const [query, setQuery] = useState('SELECT role_id, count(*) as total FROM users GROUP BY role_id;');
+  
+  // Modes: 'gui' or 'sql'
+  const [builderMode, setBuilderMode] = useState('gui');
+  
+  // SQL State
+  const [query, setQuery] = useState('');
+  
+  // GUI State
+  const [dbTables, setDbTables] = useState([]);
+  const [dbColumns, setDbColumns] = useState([]);
+  const [guiTable, setGuiTable] = useState('');
+  const [guiXAxis, setGuiXAxis] = useState('');
+  const [guiYAxis, setGuiYAxis] = useState('');
+  const [guiAgg, setGuiAgg] = useState('COUNT');
+
+  // General State
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,20 +48,59 @@ const ChartBuilder = () => {
   const [selectedRoles, setSelectedRoles] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Fetch Roles for Modal
+  // Fetch Roles and Tables on Mount
   useEffect(() => {
-    const fetchRoles = async () => {
+    const fetchInitialData = async () => {
       try {
-        const response = await axios.get('/api/roles');
-        if (response.data.success) {
-          setRoles(response.data.data);
+        const [rolesRes, tablesRes] = await Promise.all([
+          axios.get('/api/roles'),
+          axios.get('/api/schema/tables')
+        ]);
+        
+        if (rolesRes.data.success) setRoles(rolesRes.data.data);
+        if (tablesRes.data.success) {
+          setDbTables(tablesRes.data.data);
+          if (tablesRes.data.data.length > 0) {
+             setGuiTable(tablesRes.data.data[0]); // Select first table automatically
+          }
         }
       } catch (err) {
-        console.error("Gagal mengambil data roles", err);
+        console.error("Gagal mengambil data awal", err);
       }
     };
-    fetchRoles();
+    fetchInitialData();
   }, []);
+
+  // Fetch Columns when guiTable changes
+  useEffect(() => {
+    if (!guiTable) return;
+    const fetchColumns = async () => {
+      try {
+        const response = await axios.get(`/api/schema/columns/${guiTable}`);
+        if (response.data.success) {
+          setDbColumns(response.data.data);
+          setGuiXAxis('');
+          setGuiYAxis('');
+        }
+      } catch (err) {
+        console.error("Gagal mengambil kolom", err);
+      }
+    };
+    fetchColumns();
+  }, [guiTable]);
+
+  // Auto-generate SQL when GUI inputs change
+  useEffect(() => {
+    if (builderMode === 'gui' && guiTable && guiXAxis && guiYAxis) {
+      let generatedSql = '';
+      if (guiAgg === 'COUNT' && guiYAxis === '*') {
+          generatedSql = `SELECT ${guiXAxis}, COUNT(*) AS aggregate_value FROM ${guiTable} GROUP BY ${guiXAxis}`;
+      } else {
+          generatedSql = `SELECT ${guiXAxis}, ${guiAgg}(${guiYAxis}) AS aggregate_value FROM ${guiTable} GROUP BY ${guiXAxis}`;
+      }
+      setQuery(generatedSql);
+    }
+  }, [guiTable, guiXAxis, guiYAxis, guiAgg, builderMode]);
 
   const handleRunQuery = async () => {
     if (!query.trim()) return;
@@ -58,7 +112,7 @@ const ChartBuilder = () => {
       const response = await axios.post('/api/charts/run-query', { query });
       if (response.data.success) {
         setResults(response.data);
-        // Reset Configurator
+        // Reset Configurator based on Results
         const columns = Object.keys(response.data.data[0] || {});
         setXAxis(columns[0] || '');
         setYAxis(columns[1] || '');
@@ -80,12 +134,10 @@ const ChartBuilder = () => {
     return Object.keys(results.data[0]);
   };
 
-  // Mencegah data null merusak Recharts
   const getCleanData = () => {
     if (!results || !results.data) return [];
     return results.data.map(item => {
       const cleanItem = { ...item };
-      // Pastikan yAxis berupa angka (number) jika memungkinkan
       if (yAxis && cleanItem[yAxis] !== null) {
          cleanItem[yAxis] = Number(cleanItem[yAxis]);
       }
@@ -100,7 +152,6 @@ const ChartBuilder = () => {
     }
 
     setIsSaving(true);
-
     const payload = {
       title,
       description,
@@ -144,29 +195,109 @@ const ChartBuilder = () => {
 
       <div className="builder-layout">
         
-        {/* Editor SQL */}
+        {/* Editor Section */}
         <div className="editor-section">
-          <div className="editor-header">
-            <div className="editor-title">
-              <Database size={16} />
-              <span>SQL Editor (Read-Only)</span>
+          
+          <div className="editor-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="mode-toggle" style={{ display: 'flex', gap: '10px' }}>
+              <button 
+                onClick={() => setBuilderMode('gui')}
+                style={{
+                  padding: '8px 16px', borderRadius: '6px', border: 'none', 
+                  display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer',
+                  backgroundColor: builderMode === 'gui' ? '#6366f1' : '#f1f5f9',
+                  color: builderMode === 'gui' ? '#fff' : '#475569',
+                  fontWeight: builderMode === 'gui' ? 'bold' : 'normal',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <MousePointer2 size={16} /> GUI Builder
+              </button>
+              <button 
+                onClick={() => setBuilderMode('sql')}
+                style={{
+                  padding: '8px 16px', borderRadius: '6px', border: 'none',
+                  display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer',
+                  backgroundColor: builderMode === 'sql' ? '#6366f1' : '#f1f5f9',
+                  color: builderMode === 'sql' ? '#fff' : '#475569',
+                  fontWeight: builderMode === 'sql' ? 'bold' : 'normal',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <Terminal size={16} /> SQL Editor
+              </button>
             </div>
+
             <button 
               className="run-btn" 
               onClick={handleRunQuery}
-              disabled={isLoading}
+              disabled={isLoading || (builderMode === 'gui' && (!guiTable || !guiXAxis || !guiYAxis))}
             >
               <Play size={16} />
-              <span>{isLoading ? 'Running...' : 'Run Query'}</span>
+              <span>{isLoading ? 'Running...' : 'Preview Data'}</span>
             </button>
           </div>
-          <textarea
-            className="sql-textarea"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ketik kueri SELECT Anda di sini..."
-            spellCheck="false"
-          />
+
+          {builderMode === 'gui' ? (
+            <div className="gui-builder-panel" style={{ padding: '20px', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', marginTop: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="config-group">
+                  <label style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#334155' }}>1. Pilih Sumber Data (Tabel)</label>
+                  <select className="config-select" value={guiTable} onChange={(e) => setGuiTable(e.target.value)}>
+                    <option value="">-- Pilih Tabel --</option>
+                    {dbTables.map(tbl => (
+                      <option key={tbl} value={tbl}>{tbl}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="config-group">
+                  <label style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#334155' }}>2. Kelompokkan Berdasarkan (Sumbu X)</label>
+                  <select className="config-select" value={guiXAxis} onChange={(e) => setGuiXAxis(e.target.value)} disabled={!guiTable}>
+                    <option value="">-- Pilih Kolom Kategori --</option>
+                    {dbColumns.map(col => (
+                      <option key={col} value={col}>{col}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="config-group">
+                  <label style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#334155' }}>3. Metode Hitung (Agregasi)</label>
+                  <select className="config-select" value={guiAgg} onChange={(e) => setGuiAgg(e.target.value)}>
+                    <option value="COUNT">Hitung Jumlah (COUNT)</option>
+                    <option value="SUM">Total Nilai (SUM)</option>
+                    <option value="AVG">Rata-Rata (AVG)</option>
+                    <option value="MAX">Nilai Tertinggi (MAX)</option>
+                    <option value="MIN">Nilai Terendah (MIN)</option>
+                  </select>
+                </div>
+
+                <div className="config-group">
+                  <label style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#334155' }}>4. Kolom yang Dihitung (Sumbu Y)</label>
+                  <select className="config-select" value={guiYAxis} onChange={(e) => setGuiYAxis(e.target.value)} disabled={!guiTable}>
+                    <option value="">-- Pilih Kolom --</option>
+                    {guiAgg === 'COUNT' && <option value="*">Semua Kolom (*)</option>}
+                    {dbColumns.map(col => (
+                      <option key={col} value={col}>{col}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#e0e7ff', borderRadius: '6px', fontSize: '0.9rem', color: '#3730a3', fontFamily: 'monospace', lineHeight: '1.4' }}>
+                <strong style={{ display: 'block', marginBottom: '4px' }}>Auto-Generated SQL:</strong> 
+                {query || "Lengkapi pilihan di atas untuk merakit kueri SQL."}
+              </div>
+            </div>
+          ) : (
+            <textarea
+              className="sql-textarea"
+              style={{ marginTop: '16px' }}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Ketik kueri SELECT Anda di sini..."
+              spellCheck="false"
+            />
+          )}
         </div>
 
         {error && (
@@ -187,7 +318,7 @@ const ChartBuilder = () => {
             {!results && !isLoading && !error && (
               <div className="empty-results">
                 <Database size={48} style={{ opacity: 0.2 }} />
-                <p>Klik "Run Query" untuk melihat hasil tabel.</p>
+                <p>Klik "Preview Data" untuk melihat hasil tabel.</p>
               </div>
             )}
 
