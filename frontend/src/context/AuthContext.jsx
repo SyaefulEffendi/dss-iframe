@@ -2,7 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 // Konfigurasi axios global
-axios.defaults.baseURL = 'http://localhost:8000';
+const apiHost = window.location.hostname;
+axios.defaults.baseURL = `http://${apiHost}:8000`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Accept'] = 'application/json';
 
