@@ -2,7 +2,7 @@
 
 **Tujuan Dokumen:** Menjadi blueprint (panduan utama) bagi Developer dan AI Agent (Antigravity/dll) dalam membangun aplikasi.
 
-**Changelog dari v2:** Menambahkan mode *Hybrid Chart Builder* (GUI ala Metabase + SQL Editor), fitur Manajemen Profil & Reset Password, dan kebijakan *Strict Visual Analytics* (tanpa Tabel Log).
+**Changelog dari v2:** Menambahkan mode *Hybrid Chart Builder* (GUI ala Metabase + SQL Editor), fitur Manajemen Profil & Reset Password, kebijakan *Strict Visual Analytics* (tanpa Tabel Log), dan fitur **Data Explorer** (Database Previewer).
 
 ---
 
@@ -73,6 +73,12 @@ Tujuan dari project ini adalah:
 - Sistem mengeksekusi *query* melalui koneksi terpisah (`DB_CONNECTION_READONLY`) dengan hak akses `SELECT`.
 - **Query Timeout & Row Limit:** Eksekusi dibatasi *timeout* (default: 10 detik) dan UI *Data Preview* dibatasi maksimal 100 baris.
 - **Strict Visual Analytics:** Sistem ini secara eksklusif hanya melayani tipe visualisasi (Bar, Pie, Line) tanpa mencampuradukkan dengan tipe "Log Tabel", guna menjaga *dashboard* eksekutif tetap bersih dan fokus pada ringkasan data.
+
+**5.3. Modul Data Explorer (Data Analyst)**
+- Sistem menyediakan halaman khusus bagi Data Analyst untuk melakukan *preview* (mengintip) isi mentah dari tabel-tabel di *database* tanpa perlu membuka aplikasi eksternal (*phpMyAdmin*/*DBeaver*).
+- Fitur ini murni bersifat *Read-Only* dan **wajib dibatasi maksimal 100 baris** per klik tabel untuk mencegah memori server kelebihan beban (*crash*).
+- Sistem **wajib memblokir** tabel-tabel internal (*migrations, personal_access_tokens, password_reset_tokens*, dll) dari pratinjau ini demi menjaga keamanan kredensial.
+- Halaman ini hanya boleh diakses (dan menunya hanya muncul) bagi pengguna dengan *Role* Data Analyst.
 
 **5.4. Modul Dashboard Otomatis & Akses Grafik**
 - Sistem harus memiliki form untuk menyimpan grafik beserta judul dan deskripsinya.

@@ -20,10 +20,7 @@ function DataExplorer() {
     const fetchTables = async () => {
         setLoadingTables(true);
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get('http://127.0.0.1:8000/api/schema/tables', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await axios.get('/api/schema/tables');
             if (response.data.success) {
                 setTables(response.data.data);
             }
@@ -44,10 +41,7 @@ function DataExplorer() {
         setSelectedTable(tableName);
         setLoadingData(true);
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.get(`http://127.0.0.1:8000/api/schema/preview/${tableName}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await axios.get(`/api/schema/preview/${tableName}`);
             if (response.data.success) {
                 setTableData(response.data.data);
             }
