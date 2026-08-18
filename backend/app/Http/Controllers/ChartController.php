@@ -121,6 +121,7 @@ class ChartController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'raw_query' => 'required|string',
             'chart_type' => 'required|in:bar,pie,line',
             'config' => 'required|array',
             'role_ids' => 'required|array',
@@ -129,6 +130,7 @@ class ChartController extends Controller
 
         $chart->title = $request->title;
         $chart->description = $request->description;
+        $chart->raw_query = $request->raw_query;
         $chart->chart_type = $request->chart_type;
         $chart->config = $request->config;
         $chart->save();

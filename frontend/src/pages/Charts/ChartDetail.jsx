@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ArrowLeft, Code, Copy, CheckCircle, Edit3, Save, X } from 'lucide-react';
+import { ArrowLeft, Code, Copy, CheckCircle, Edit3, Save, X, Play } from 'lucide-react';
 import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -24,11 +24,13 @@ const ChartDetail = () => {
   const [generating, setGenerating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isTestingQuery, setIsTestingQuery] = useState(false);
 
   // State Editor
   const [editData, setEditData] = useState({
     title: '',
     description: '',
+    raw_query: '',
     chart_type: '',
     x_axis: '',
     y_axis: '',
@@ -50,6 +52,7 @@ const ChartDetail = () => {
         setEditData({
           title: c.title,
           description: c.description || '',
+          raw_query: c.raw_query,
           chart_type: c.chart_type,
           x_axis: c.config.x_axis,
           y_axis: c.config.y_axis,
@@ -125,6 +128,23 @@ const ChartDetail = () => {
     }
   };
 
+  const handleTestQuery = async () => {
+    if (!editData.raw_query) return;
+    setIsTestingQuery(true);
+    try {
+      const res = await axios.post('/api/charts/run-query', { query: editData.raw_query });
+      if (res.data.success) {
+        setChart({ ...chart, data: res.data.data, query_error: null });
+        MySwal.fire({ icon: 'success', title: 'Berhasil', text: `Berhasil menarik ${res.data.count} baris data. Silakan pilih kembali Sumbu X dan Y Anda.`, toast: true, position: 'top-end', timer: 4000, showConfirmButton: false });
+      }
+    } catch (err) {
+      setChart({ ...chart, query_error: err.response?.data?.message || 'Error executing query' });
+      MySwal.fire('Error Kueri', err.response?.data?.message || 'Terjadi kesalahan.', 'error');
+    } finally {
+      setIsTestingQuery(false);
+    }
+  };
+
   const handleSaveChanges = async () => {
     if (!editData.title || editData.selectedRoles.length === 0) {
       MySwal.fire('Error', 'Judul dan minimal satu Role harus diisi!', 'error');
@@ -135,6 +155,7 @@ const ChartDetail = () => {
     const payload = {
       title: editData.title,
       description: editData.description,
+      raw_query: editData.raw_query,
       chart_type: editData.chart_type,
       config: { x_axis: editData.x_axis, y_axis: editData.y_axis },
       role_ids: editData.selectedRoles
@@ -219,7 +240,25 @@ const ChartDetail = () => {
       </div>
 
       {isEditing ? (
-        <div className="edit-config-panel">
+        <div className="edit-config-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {/* SQL Editor Area */}
+          <div className="config-group" style={{ width: '100%' }}>
+            <label>Kueri SQL</label>
+            <textarea 
+              value={editData.raw_query} 
+              onChange={(e) => setEditData({...editData, raw_query: e.target.value})}
+              className="sql-editor"
+              style={{ width: '100%', minHeight: '100px', fontFamily: 'monospace', padding: '1rem', borderRadius: '8px', border: '1px solid #d1d5db', resize: 'vertical' }}
+            />
+            <button 
+              onClick={handleTestQuery} 
+              disabled={isTestingQuery}
+              style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '600' }}
+            >
+              <Play size={14} /> {isTestingQuery ? 'Menjalankan...' : 'Run Query & Update Opsi Sumbu'}
+            </button>
+          </div>
+
           <div className="config-row">
             <div className="config-group">
               <label>Tipe Grafik</label>
