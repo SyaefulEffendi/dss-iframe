@@ -74,16 +74,3 @@ Pastikan komputer Anda sudah terinstal:
    npm run dev
    ```
    *(Aplikasi frontend bisa diakses di browser, biasanya pada `http://localhost:5173`)*
-
----
-
-## 🔑 Akun Uji Coba (Berdasarkan Seeder)
-
-Setelah menjalankan `php artisan migrate --seed`, Anda dapat masuk menggunakan akun *Data Analyst* berikut:
-
-- **Email:** `mohsyaefuleffendi@student.uns.ac.id`
-- **Kata Sandi:** `password` *(atau sesuai definisi Anda di dalam file DatabaseSeeder.php)*
-
----
-
-*Proyek ini dikembangkan sebagai bagian dari sistem pendukung keputusan / laporan magang.*
