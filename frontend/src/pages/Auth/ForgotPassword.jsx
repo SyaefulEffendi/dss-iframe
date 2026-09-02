@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ShieldCheck, BarChart2, ArrowLeft } from 'lucide-react';
 import '../Login/Login.css';
@@ -9,6 +9,7 @@ const ForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ const ForgotPassword = () => {
     try {
       const response = await axios.post('/api/forgot-password', { email });
       if (response.data.success) {
-        setMessage(response.data.message);
+        navigate(`/reset-password?email=${encodeURIComponent(email)}`);
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Gagal mengirim tautan reset. Pastikan email terdaftar.');

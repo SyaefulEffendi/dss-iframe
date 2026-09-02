@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 import './Settings.css';
@@ -15,7 +16,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [emailLinkMessage, setEmailLinkMessage] = useState('');
+  const navigate = useNavigate();
 
   const emailChanged = formData.email !== user?.email;
 
@@ -45,16 +46,15 @@ const Settings = () => {
 
   const handleForgotPassword = async () => {
     setLoading(true);
-    setEmailLinkMessage('');
     setError('');
     
     try {
       const response = await axios.post('/api/forgot-password', { email: user.email });
       if (response.data.success) {
-        setEmailLinkMessage(response.data.message);
+        navigate(`/reset-password?email=${encodeURIComponent(user.email)}`);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Gagal mengirim tautan reset kata sandi.');
+      setError(err.response?.data?.message || 'Gagal mengirim OTP untuk reset kata sandi.');
     } finally {
       setLoading(false);
     }
@@ -121,10 +121,8 @@ const Settings = () => {
         <div className="settings-card">
           <h2>Keamanan</h2>
           <p className="help-text">
-            Untuk mengubah kata sandi, sistem akan mengirimkan tautan aman ke email Anda (<strong>{user?.email}</strong>).
+            Untuk mengubah kata sandi, sistem akan mengirimkan OTP ke email Anda (<strong>{user?.email}</strong>) demi keamanan.
           </p>
-          
-          {emailLinkMessage && <div className="alert success">{emailLinkMessage}</div>}
           
           <button 
             onClick={handleForgotPassword} 
@@ -132,7 +130,7 @@ const Settings = () => {
             disabled={loading}
             style={{ marginTop: '1rem' }}
           >
-            Kirim Tautan Ganti Kata Sandi
+            {loading ? 'Memproses...' : 'Ganti Kata Sandi'}
           </button>
         </div>
       </div>
