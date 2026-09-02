@@ -63,7 +63,7 @@ Tujuan dari project ini adalah:
 - Sistem harus memiliki fitur login multi-user.
 - Sistem harus bisa membuat, mengedit, dan menghapus *Role* (Contoh: CEO, Manager HR, Manager IT, Data Analis).
 - Sistem harus bisa mengelola daftar pengguna dan memasukkan mereka ke dalam *Role* tertentu.
-- **[BARU] Profil & Keamanan:** Pengguna dapat mengelola profil mereka (Nama, Email, Foto). Perubahan email dilindungi konfirmasi *password*, dan fitur *Reset Password* dikirim melalui tautan email demi standar keamanan tinggi.
+- **[BARU] Profil & Keamanan (Sistem OTP):** Pengguna dapat mengelola profil mereka (Nama, Email). Fitur *Reset Password* dan *Ganti Kata Sandi* (di Pengaturan) dilindungi oleh sistem keamanan tinggi menggunakan **OTP (One-Time Password) 6-digit** yang dikirim via email HTML berdesain *Dark Mode*. OTP divalidasi menggunakan *Laravel Cache* dengan masa aktif 5 menit melalui UI 2-langkah interaktif untuk mencegah *session hijacking*.
 - Pada MVP, hak untuk mengelola Role & User melekat pada akun dengan role "Data Analis"/Admin — belum ada role "Super Admin" terpisah.
 
 **5.2. Modul Chart Builder (Hybrid Mode: GUI & SQL)**
@@ -171,8 +171,9 @@ dss-project/
 ## 11. Keputusan Teknis (Technical Decisions)
 - **Mengapa memisah Backend (Laravel) dan Frontend (ReactJS)?** Agar API Laravel murni berfungsi sebagai penyedia data (JSON) dan *query runner*. ReactJS dipilih di *frontend* karena ekosistem *library* grafiknya sangat kaya, interaktif, dan optimal untuk me-render banyak grafik berat dalam satu *dashboard* tanpa *reload* halaman.
 - **Sistem Autentikasi API (Token-Based):** Disepakati menggunakan **Laravel Sanctum** untuk men-*generate* Token API (*Bearer Token*) alih-alih menggunakan *Session/Cookie* konvensional. Ini membuat komunikasi antara port React (5173) dan Laravel (8000) lebih aman dan terstruktur.
-- **Notifikasi Antarmuka Pengguna (UI):** Menambahkan **SweetAlert2** dan **sweetalert2-react-content** pada Frontend untuk menggantikan *alert* bawaan browser, sehingga pengalaman pengguna (seperti notifikasi sukses/gagal login) terlihat jauh lebih profesional dan *seamless*.
-- **Peningkatan UX - Live Search:** Menambahkan fitur pencarian cerdas (*Live Search*) pada Halaman 06 (Charts List) di sisi klien (*Client-side filtering*). Fitur ini berada di luar cakupan spesifikasi MVP awal, namun ditambahkan secara proaktif guna mempercepat proses *Data Analyst* dalam mencari visualisasi tanpa perlu navigasi yang rumit.
+- **Keamanan Lapis Ganda dengan OTP (One-Time Password):** Tidak menggunakan *reset link* standar bawaan framework, sistem ini mengimplementasikan OTP 6-digit untuk fitur "Lupa Sandi" maupun "Ganti Sandi" bagi pengguna yang sudah login. OTP disimpan di *Laravel Cache* (masa berlaku 5 menit). Hal ini terbukti jauh lebih kokoh terhadap celah *session hijacking* (pencurian *cookie*).
+- **Notifikasi Antarmuka Pengguna (UI) & Global Dark Mode:** Seluruh aplikasi dibangun dengan pendekatan visual modern *Dark Mode* menggunakan variabel CSS murni yang responsif di Desktop maupun Mobile. Modul pemberitahuan menggunakan **SweetAlert2** dan **sweetalert2-react-content** untuk *alert* yang halus.
+- **Peningkatan UX - Live Search & 2-Step Form:** Menambahkan *Live Search* pada Halaman Charts List (*Client-side filtering*) dan merombak formulir reset sandi menjadi 2-langkah dinamis (Input OTP -> Validasi -> Input Sandi Baru) secara asinkron (AJAX).
 - **Development Environment:** Secara spesifik menggunakan **Laragon** (menggantikan XAMPP) untuk server database lokal MySQL guna menghindari *error/port collision* yang sering terjadi.
 - **Inisialisasi Data (Seeder):** Otomatisasi pembuatan akun utama pertama kali menggunakan kredensial email spesifik mahasiswa (`mohsyaefuleffendi@student.uns.ac.id`) dengan *role* Data Analyst, agar pengujian aplikasi dapat langsung dilakukan pasca-migrasi.
 - **Mengapa Docker?** Mengadopsi keunggulan Metabase. Dengan Docker, *environment* aplikasi terisolasi dengan rapi. Kontributor atau AI tidak perlu mengurus versi PHP atau Node.js lokal, cukup `docker-compose up`.
