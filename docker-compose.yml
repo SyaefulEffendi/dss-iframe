@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  dss_frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dss_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - dss_backend
+    networks:
+      - dss_network
+
+  dss_backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dss_backend
+    ports:
+      - "8000:80"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=dss_db
+      - DB_PORT=3306
+      - DB_DATABASE=dss_project
+      - DB_USERNAME=dss_user
+      - DB_PASSWORD=dss_password
+    depends_on:
+      - dss_db
+    volumes:
+      - ./backend:/var/www/html
+      - /var/www/html/vendor
+    networks:
+      - dss_network
+
+  dss_db:
+    image: mysql:8.0
+    container_name: dss_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: dss_project
+      MYSQL_USER: dss_user
+      MYSQL_PASSWORD: dss_password
+      MYSQL_ROOT_PASSWORD: dss_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - dss_db_data:/var/lib/mysql
+    networks:
+      - dss_network
+
+networks:
+  dss_network:
+    driver: bridge
+
+volumes:
+  dss_db_data:
