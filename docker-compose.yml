@@ -1,13 +1,28 @@
 version: '3.8'
 
 services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - dss_network
+    depends_on:
+      - dss_frontend
+      - dss_backend
+
   dss_frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: dss_frontend
-    ports:
-      - "80:80"
     depends_on:
       - dss_backend
     networks:
@@ -18,8 +33,6 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: dss_backend
-    ports:
-      - "8000:80"
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=dss_db
@@ -57,3 +70,5 @@ networks:
 
 volumes:
   dss_db_data:
+  caddy_data:
+  caddy_config:

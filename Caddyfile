@@ -1,0 +1,13 @@
+dss.rintisku.id {
+    handle /api/* {
+        reverse_proxy dss_backend:80
+    }
+    
+    handle /storage/* {
+        reverse_proxy dss_backend:80
+    }
+    
+    handle {
+        reverse_proxy dss_frontend:80
+    }
+}

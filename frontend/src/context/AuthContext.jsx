@@ -3,7 +3,9 @@ import axios from 'axios';
 
 // Konfigurasi axios global
 const apiHost = window.location.hostname;
-axios.defaults.baseURL = `http://${apiHost}:8000`;
+const apiProtocol = window.location.protocol;
+const apiPort = apiProtocol === 'https:' ? '' : ':8000';
+axios.defaults.baseURL = `${apiProtocol}//${apiHost}${apiPort}`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.post['Accept'] = 'application/json';
 

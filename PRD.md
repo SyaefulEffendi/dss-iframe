@@ -134,7 +134,7 @@ Tujuan dari project ini adalah:
 - **Chart Library (React):** Recharts, Chart.js, atau ApexCharts (dipilih salah satu saat tahap *development*).
 - **Database:** MySQL / PostgreSQL (sebagai sumber data dan penyimpan state aplikasi).
 - **Caching:** Laravel Cache (driver file/database untuk MVP; Redis dapat dipertimbangkan bila kebutuhan performa meningkat).
-- **Infrastructure / Deployment:** Docker & Docker Compose (meniru kemudahan instalasi Metabase yang bersifat *self-hosted*).
+- **Infrastructure / Deployment:** Docker & Docker Compose, dengan **Caddy Server** sebagai *Reverse Proxy* untuk otomatisasi HTTPS (Let's Encrypt) dan *routing* API.
 
 ## 9. Struktur Folder
 Proyek ini akan menggunakan arsitektur pemisahan *repository* secara logis namun disatukan dalam satu *root* (monorepo) untuk kemudahan kontainerisasi menggunakan Docker.
@@ -182,6 +182,7 @@ dss-project/
 - **Metabase-Style GUI:** Pengembangan *GUI Builder* memanfaatkan fitur `Schema::getTables()` dan `Schema::getColumns()` dari sisi Laravel untuk memetakan struktur *database* ke *frontend* ReactJS secara dinamis, tanpa perlu migrasi *schema* tambahan.
 - **Mengapa Dashboard otomatis, bukan custom?** Menyederhanakan MVP — Data Analis cukup fokus assign role per chart, tanpa perlu langkah tambahan menyusun tata letak dashboard. Ini juga meniru pola *permission-based visibility* yang sering dipakai tool BI enterprise.
 - **Mengapa Iframe pakai token statis (bukan expiry otomatis) di MVP?** Menyederhanakan implementasi awal sambil tetap aman — token acak sulit ditebak, dan mekanisme regenerate manual sudah cukup untuk mitigasi risiko kebocoran pada tahap MVP. Expiry otomatis/berbasis waktu dapat ditambahkan di iterasi berikutnya.
+- **[UPDATE] Automatic HTTPS & Reverse Proxy:** Menggunakan **Caddy Server** dalam arsitektur Docker untuk mengelola sertifikat SSL secara otomatis dan meneruskan lalu lintas `/api/*` ke *backend* Laravel. Ini menyederhanakan akses (semua lewat port 443 HTTPS) dan mengatasi masalah *Mixed Content* serta *CORS* di lingkungan produksi.
 
 ## 12. Struktur Database
 Database Relasional (MySQL/PostgreSQL) difokuskan pada manajemen aplikasi dan RBAC.
