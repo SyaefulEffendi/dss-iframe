@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, Code, Copy, CheckCircle, Edit3, Save, X, Play } from 'lucide-react';
-import { BarChart, Bar, PieChart, Pie, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import ChartRenderer from '../../components/ChartRenderer';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import './ChartDetail.css';
 
 const MySwal = withReactContent(Swal);
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
 
 const ChartDetail = () => {
   const { id } = useParams();
@@ -266,6 +265,11 @@ const ChartDetail = () => {
                 <option value="bar">Bar Chart</option>
                 <option value="pie">Pie Chart</option>
                 <option value="line">Line Chart</option>
+                <option value="area">Area Chart</option>
+                <option value="scatter">Scatter Plot</option>
+                <option value="radar">Radar Chart</option>
+                <option value="gauge">Gauge Chart</option>
+                <option value="heatmap">Heatmap</option>
               </select>
             </div>
             <div className="config-group">
@@ -322,37 +326,14 @@ const ChartDetail = () => {
         {chart.query_error ? (
           <div style={{ color: 'red' }}>Error Kueri: {chart.query_error}</div>
         ) : (
-          <ResponsiveContainer width="100%" height={500}>
-            {currentChartType === 'bar' && (
-              <BarChart data={getCleanData()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={currentXAxis} />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey={currentYAxis} fill="#6366f1" />
-              </BarChart>
-            )}
-            {currentChartType === 'line' && (
-              <LineChart data={getCleanData()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey={currentXAxis} />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey={currentYAxis} stroke="#6366f1" strokeWidth={3} />
-              </LineChart>
-            )}
-            {currentChartType === 'pie' && (
-              <PieChart>
-                <Tooltip />
-                <Legend />
-                <Pie data={getCleanData()} dataKey={currentYAxis} nameKey={currentXAxis} cx="50%" cy="50%" outerRadius={180} label>
-                  {getCleanData().map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
-                </Pie>
-              </PieChart>
-            )}
-          </ResponsiveContainer>
+          <div style={{ height: '500px', width: '100%' }}>
+            <ChartRenderer 
+              chartType={currentChartType}
+              xAxis={currentXAxis}
+              yAxis={currentYAxis}
+              data={chart.data}
+            />
+          </div>
         )}
       </div>
     </div>

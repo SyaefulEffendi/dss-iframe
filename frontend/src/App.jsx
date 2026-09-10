@@ -4,14 +4,14 @@ import { AuthProvider, AuthContext } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login/Login';
 import BaseLayout from './components/layout/BaseLayout';
-import DashboardAnalyst from './pages/Dashboard/DashboardAnalyst';
+import DashboardsList from './pages/Dashboard/DashboardsList';
+import DashboardEditor from './pages/Dashboard/DashboardEditor';
 import ChartsList from './pages/Charts/ChartsList';
 import ChartBuilder from './pages/Charts/ChartBuilder';
 import ChartDetail from './pages/Charts/ChartDetail';
 import IframeEmbed from './pages/Embed/IframeEmbed';
 import RolesList from './pages/Roles/RolesList';
 import UsersList from './pages/Users/UsersList';
-import DashboardViewer from './pages/Dashboard/DashboardViewer';
 import Settings from './pages/Settings/Settings';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
@@ -44,9 +44,12 @@ const AppRoutes = () => {
       {/* Dashboard Route */}
       <Route path="/dashboard" element={
         <ProtectedRoute>
-          <BaseLayout>
-            {isAnalyst ? <DashboardAnalyst /> : <DashboardViewer />}
-          </BaseLayout>
+          <BaseLayout><DashboardsList /></BaseLayout>
+        </ProtectedRoute>
+      } />
+      <Route path="/dashboard/:id" element={
+        <ProtectedRoute>
+          <BaseLayout><DashboardEditor /></BaseLayout>
         </ProtectedRoute>
       } />
 

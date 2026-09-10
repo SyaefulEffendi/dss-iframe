@@ -33,4 +33,11 @@ class Chart extends Model
     {
         return $this->belongsTo(User::class, 'creator_id');
     }
+
+    public function dashboards()
+    {
+        return $this->belongsToMany(Dashboard::class, 'dashboard_chart')
+            ->withPivot('layout_config')
+            ->withTimestamps();
+    }
 }

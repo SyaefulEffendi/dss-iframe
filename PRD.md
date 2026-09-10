@@ -1,8 +1,8 @@
-# Product Requirements Document (PRD) v2 - Decision Support System (DSS) Custom BI Tool
+# Product Requirements Document (PRD) v3 - Decision Support System (DSS) Custom BI Tool
 
 **Tujuan Dokumen:** Menjadi blueprint (panduan utama) bagi Developer dan AI Agent (Antigravity/dll) dalam membangun aplikasi.
 
-**Changelog dari v2:** Menambahkan mode *Hybrid Chart Builder* (GUI ala Metabase + SQL Editor), fitur Manajemen Profil & Reset Password, kebijakan *Strict Visual Analytics* (tanpa Tabel Log), dan fitur **Data Explorer** (Database Previewer).
+**Changelog dari v2:** Menambahkan mode *Hybrid Chart Builder* (GUI ala Metabase + SQL Editor), fitur Manajemen Profil & Reset Password, kebijakan *Strict Visual Analytics* (tanpa Tabel Log), fitur **Data Explorer** (Database Previewer), transisi ke **Dashboard Manual (Drag & Drop)**, dan migrasi library visualisasi ke **ECharts** (dengan 8 tipe grafik).
 
 ---
 
@@ -48,7 +48,11 @@ Tujuan dari project ini adalah:
 
 ### Konsumsi Data (End User / CEO / Manajer)
 *   **Story:** Sebagai Manajer, saya mau login ke dashboard supaya saya bisa memantau metrik departemen saya.
-    *   **AC:** Setelah berhasil login, halaman *dashboard* otomatis merender **semua** grafik yang memiliki otorisasi untuk *role* pengguna yang login — tanpa perlu Data Analis menyusun dashboard secara manual. Grafik role lain (misal CEO) tidak boleh bocor/tampil.
+    *   **AC:** Setelah berhasil login, pengguna dapat melihat daftar Dashboard yang relevan dengan hak akses (jabatan) mereka. Mereka dapat membuka dashboard dan melihat grafik-grafik yang telah disusun oleh Data Analis dengan tata letak (grid) yang rapi. Grafik milik role lain tidak boleh bocor/tampil.
+
+### Manajemen Dashboard (Data Analis)
+*   **Story:** Sebagai Data Analis, saya mau merakit dashboard secara kustom dan mengatur ukuran/posisi grafik (drag-and-drop) supaya tampilannya mudah dibaca oleh eksekutif.
+    *   **AC:** Terdapat halaman Dashboard Editor berbasis Grid (menggunakan react-grid-layout) di mana Analis bisa memilih grafik dari "pool", menariknya ke dalam kanvas, mengatur lebarnya, lalu menyimpan layout (posisi & ukuran) ke database.
 
 ### Iframe Embedding (Eksternal / Integrasi)
 *   **Story:** Sebagai Data Analis, saya mau men-generate token embed untuk grafik tertentu supaya grafiknya bisa dipasang di website eksternal tanpa harus login.
@@ -80,11 +84,12 @@ Tujuan dari project ini adalah:
 - Sistem **wajib memblokir** tabel-tabel internal (*migrations, personal_access_tokens, password_reset_tokens*, dll) dari pratinjau ini demi menjaga keamanan kredensial.
 - Halaman ini hanya boleh diakses (dan menunya hanya muncul) bagi pengguna dengan *Role* Data Analyst.
 
-**5.4. Modul Dashboard Otomatis & Akses Grafik**
-- Sistem harus memiliki form untuk menyimpan grafik beserta judul dan deskripsinya.
-- **[CRITICAL]** Sistem wajib memiliki *checkbox/dropdown* multi-select untuk memilih *Role* mana saja yang berhak melihat grafik tersebut.
-- Sistem harus me-render halaman *Dashboard* secara **otomatis dan dinamis**: tidak ada konsep "menyusun dashboard" secara manual — dashboard adalah kumpulan seluruh grafik yang role-nya cocok dengan role pengguna yang sedang login, disusun dalam grid statis standar (lihat Bab 7 — layout builder di luar scope MVP).
-- **[BARU] Caching:** Hasil eksekusi query untuk sebuah chart dapat di-cache selama durasi tertentu (rekomendasi default: 5 menit, dapat dikonfigurasi per chart) untuk mengurangi beban database saat dashboard dibuka berulang kali oleh banyak user dalam waktu berdekatan. Cache di-invalidasi otomatis saat masa berlaku habis, atau manual saat Data Analis mengedit `raw_query`/`config` chart.
+**5.4. Modul Dashboard Manual & Layout Editor (Custom Dashboard)**
+- Sistem harus memiliki form untuk membuat entitas **Dashboard** (Judul, Kreator).
+- Halaman *Dashboard* berfungsi ganda: sebagai daftar list dashboard untuk end-user, dan sebagai **Workspace/Editor** bagi Data Analis.
+- Data Analis dapat merakit satu dashboard berisi berbagai kombinasi grafik yang mereka buat melalui antarmuka *Drag & Drop* (menggunakan library `react-grid-layout`).
+- Konfigurasi tata letak (X, Y, Lebar, Tinggi) dari masing-masing grafik disimpan di tabel pivot `dashboard_chart`.
+- **[BARU] Caching:** Hasil eksekusi query untuk sebuah chart dapat di-cache selama durasi tertentu (rekomendasi default: 5 menit) untuk mengurangi beban database saat dashboard dibuka berulang kali. Cache di-invalidasi otomatis saat masa berlaku habis.
 
 **5.5. Modul Embed / Iframe**
 - Sistem harus dapat men-generate `embed_token` unik (random string) per chart untuk akses publik tanpa login.
@@ -110,8 +115,8 @@ Tujuan dari project ini adalah:
 **In Scope (Yang dikerjakan pada rilis awal / MVP):**
 - Sistem Login dan Role-based Access Control (RBAC) dasar, termasuk CRUD Role & User oleh Admin/Data Analis.
 - Custom Query Runner ke 1 database utama, dengan query timeout dan row limit pada preview.
-- Chart Builder (Bar, Pie, Line) menggunakan ReactJS.
-- Dynamic Dashboard otomatis (menyesuaikan role, tanpa layout builder manual).
+- Chart Builder & Renderer menggunakan ReactJS + **ECharts** (8 tipe chart: Bar, Pie, Line, Area, Scatter, Radar, Gauge, Heatmap).
+- Custom Dashboard Manual dengan fitur **Drag & Drop Layout Editor**.
 - Caching sederhana untuk hasil query chart (default 5 menit).
 - Iframe embed token generator (token statis + regenerate manual) untuk integrasi eksternal.
 - Setup Docker (Dockerfile & docker-compose.yml).
@@ -120,8 +125,6 @@ Tujuan dari project ini adalah:
 - Koneksi ke berbagai jenis *Multiple Heterogeneous Databases* secara bersamaan (fokus 1 sumber database dulu).
 - Fitur *Export* data ke PDF / Excel.
 - Algoritma prediksi atau AI Data Analytics.
-- *Drag and drop dashboard layout builder* (layout disusun statis berbasis *grid* standar terlebih dahulu).
-- Dashboard custom bernama/kombinasi chart pilihan manual (dashboard bersifat otomatis penuh pada MVP).
 - Role "Super Admin" terpisah dari "Data Analis" untuk pengelolaan Role & User.
 - Token embed dengan masa berlaku (expiry) otomatis — MVP hanya token statis dengan regenerate manual.
 - Audit log komprehensif (bisa jadi *nice-to-have* bila waktu memungkinkan, bukan syarat wajib MVP).
@@ -131,7 +134,7 @@ Tujuan dari project ini adalah:
 
 - **Backend / Core API:** Laravel (PHP). Menyediakan REST API, menangani RBAC, eksekusi query, dan logika bisnis.
 - **Frontend / UI:** ReactJS. Digunakan sebagai Single Page Application (SPA) untuk interaktivitas tinggi.
-- **Chart Library (React):** Recharts, Chart.js, atau ApexCharts (dipilih salah satu saat tahap *development*).
+- **Chart Library (React):** ECharts (Apache ECharts) melalui wrapper `echarts-for-react`. Dipilih karena sangat handal, interaktif, dan mendukung visualisasi yang sangat bervariasi.
 - **Database:** MySQL / PostgreSQL (sebagai sumber data dan penyimpan state aplikasi).
 - **Caching:** Laravel Cache (driver file/database untuk MVP; Redis dapat dipertimbangkan bila kebutuhan performa meningkat).
 - **Infrastructure / Deployment:** Docker & Docker Compose, dengan **Caddy Server** sebagai *Reverse Proxy* untuk otomatisasi HTTPS (Let's Encrypt) dan *routing* API.
@@ -192,12 +195,14 @@ Database Relasional (MySQL/PostgreSQL) difokuskan pada manajemen aplikasi dan RB
 - **`charts`**:
   - `id`, `title`, `description`
   - `raw_query` (Text - menyimpan sintaks SQL)
-  - `chart_type` (Enum: bar, pie, line)
+  - `chart_type` (Enum: bar, pie, line, area, scatter, radar, gauge, heatmap)
   - `config` (JSON - menyimpan setting sumbu X/Y, warna)
   - `creator_id` (Foreign Key ke `users`)
   - `embed_token` (String, unique, nullable — diisi saat Data Analis generate embed)
   - `cache_ttl_seconds` (Integer, default 300 — durasi cache hasil query)
 - **`chart_role` (Pivot Table)**: `chart_id`, `role_id` (Menentukan *role* mana saja yang bisa melihat grafik ini).
+- **`dashboards`**: `id`, `title`, `creator_id`, `created_at`, `updated_at`.
+- **`dashboard_chart` (Pivot Table)**: `dashboard_id`, `chart_id`, `layout_config` (JSON untuk menyimpan posisi Grid/Grid Layout).
 - **`activity_logs`** *(opsional, lihat Bab 7)*: `id`, `user_id`, `action`, `target_type`, `target_id`, `created_at`.
 
 ## 13. Coding Convention

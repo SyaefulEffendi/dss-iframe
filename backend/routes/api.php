@@ -33,6 +33,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Dashboard
     Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
     Route::get('/dashboard/viewer', [DashboardController::class, 'viewerDashboard']);
+    
+    // Custom Dashboards
+    Route::get('/dashboards', [DashboardController::class, 'index']);
+    Route::post('/dashboards', [DashboardController::class, 'store']);
+    Route::get('/dashboards/{id}', [DashboardController::class, 'show']);
+    Route::put('/dashboards/{id}', [DashboardController::class, 'update']);
+    Route::delete('/dashboards/{id}', [DashboardController::class, 'destroy']);
+    Route::post('/dashboards/{id}/sync', [DashboardController::class, 'syncCharts']);
 
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);

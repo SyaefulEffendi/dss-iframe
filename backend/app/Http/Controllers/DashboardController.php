@@ -89,4 +89,126 @@ class DashboardController extends Controller
             'data' => $chartsData
         ]);
     }
+    public function index()
+    {
+        $dashboards = \App\Models\Dashboard::with('creator')->get();
+        return response()->json([
+            'success' => true,
+            'data' => $dashboards
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255'
+        ]);
+
+        $dashboard = \App\Models\Dashboard::create([
+            'title' => $request->title,
+            'creator_id' => $request->user()->id
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $dashboard
+        ]);
+    }
+
+    public function show(Request $request, $id, \App\Services\QueryRunnerService $queryRunner)
+    {
+        $dashboard = \App\Models\Dashboard::with('creator')->findOrFail($id);
+        $user = $request->user();
+
+        // Get charts associated with this dashboard
+        $chartsQuery = $dashboard->charts()->with('roles');
+
+        // Filter charts based on user role (unless they are the creator or have full access)
+        // Adjusting based on how viewerDashboard behaves: if user has a role, only show those charts.
+        if ($user->role_id) {
+            // But wait, what if the user is Data Analyst (admin) and wants to edit?
+            // Actually, PRD says Data Analyst is a role. If they have role_id, they'll only see charts assigned to them?
+            // Let's ensure creators or Data Analysts can see everything if we want to allow editing,
+            // or we just follow the rule: charts seen are those the user has role for.
+            $chartsQuery->where(function ($query) use ($user) {
+                $query->whereHas('roles', function($q) use ($user) {
+                    $q->where('roles.id', $user->role_id);
+                })->orWhere('creator_id', $user->id);
+            });
+        }
+
+        $charts = $chartsQuery->get();
+
+        // Execute queries for each chart
+        $chartsData = $charts->map(function ($chart) use ($queryRunner) {
+            try {
+                $results = $queryRunner->runQuery($chart->raw_query);
+                $chart->setAttribute('data', $results);
+            } catch (\Exception $e) {
+                $chart->setAttribute('data', []);
+                $chart->setAttribute('query_error', $e->getMessage());
+            }
+            return $chart;
+        });
+
+        // Set relation correctly so it serializes properly
+        $dashboard->setRelation('charts', $chartsData);
+
+        return response()->json([
+            'success' => true,
+            'data' => $dashboard
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $dashboard = \App\Models\Dashboard::findOrFail($id);
+        $request->validate([
+            'title' => 'required|string|max:255'
+        ]);
+
+        $dashboard->update([
+            'title' => $request->title
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $dashboard
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $dashboard = \App\Models\Dashboard::findOrFail($id);
+        $dashboard->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Dashboard deleted successfully'
+        ]);
+    }
+
+    public function syncCharts(Request $request, $id)
+    {
+        $dashboard = \App\Models\Dashboard::findOrFail($id);
+        
+        $request->validate([
+            'layouts' => 'required|array',
+            'layouts.*.i' => 'required', // This should correspond to chart_id
+        ]);
+
+        $syncData = [];
+        foreach ($request->layouts as $layout) {
+            // Remove any potential prefix from 'i' if frontend adds one (like 'chart_1')
+            $chartId = str_replace('chart_', '', $layout['i']);
+            $syncData[$chartId] = ['layout_config' => json_encode($layout)];
+        }
+
+        $dashboard->charts()->sync($syncData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Dashboard layout updated successfully'
+        ]);
+    }
 }

@@ -93,7 +93,7 @@ class ChartController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'raw_query' => 'required|string',
-            'chart_type' => 'required|in:bar,pie,line',
+            'chart_type' => 'required|in:bar,pie,line,area,scatter,radar,gauge,heatmap',
             'config' => 'required|array', // JSON containing x_axis, y_axis, etc.
             'role_ids' => 'required|array', // Array of Role IDs
             'role_ids.*' => 'exists:roles,id'
@@ -134,7 +134,7 @@ class ChartController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'raw_query' => 'required|string',
-            'chart_type' => 'required|in:bar,pie,line',
+            'chart_type' => 'required|in:bar,pie,line,area,scatter,radar,gauge,heatmap',
             'config' => 'required|array',
             'role_ids' => 'required|array',
             'role_ids.*' => 'exists:roles,id'
