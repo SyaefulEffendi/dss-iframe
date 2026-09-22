@@ -185,7 +185,7 @@ const DashboardEditor = () => {
         
         {isAnalyst && (
           <div className="editor-actions">
-            <button className="btn-add" onClick={generateToken} disabled={generating} style={{ backgroundColor: '#8b5cf6' }}>
+            <button className="btn-add" onClick={generateToken} disabled={generating} style={{ backgroundColor: '#8b5cf6', color: '#ffffff' }}>
               {generating ? 'Memproses...' : (dashboard.embed_token ? 'Regenerate Token' : 'Generate Token')}
             </button>
             <button className="btn-add" onClick={() => setShowAddModal(true)}>
