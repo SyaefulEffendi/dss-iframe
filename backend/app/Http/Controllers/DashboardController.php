@@ -211,4 +211,61 @@ class DashboardController extends Controller
             'message' => 'Dashboard layout updated successfully'
         ]);
     }
+
+    /**
+     * Generate or re-generate an embed token for a dashboard
+     */
+    public function generateToken(Request $request, $id)
+    {
+        $dashboard = \App\Models\Dashboard::findOrFail($id);
+
+        // Hanya Data Analyst atau pembuat yang boleh generate
+        if ($request->user()->role->name !== 'Data Analyst' && $dashboard->creator_id !== $request->user()->id) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        // Generate token acak 40 karakter
+        $dashboard->embed_token = \Illuminate\Support\Str::random(40);
+        $dashboard->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Token berhasil dibuat.',
+            'embed_token' => $dashboard->embed_token
+        ]);
+    }
+
+    /**
+     * PUBLIC API: Get dashboard by embed token (No Auth Required)
+     */
+    public function getDashboardByToken($token, \App\Services\QueryRunnerService $queryRunner)
+    {
+        $dashboard = \App\Models\Dashboard::where('embed_token', $token)->first();
+
+        if (!$dashboard) {
+            return response()->json(['success' => false, 'message' => 'Token tidak valid atau dashboard telah dihapus.'], 404);
+        }
+
+        // Get all charts associated with this dashboard
+        $charts = $dashboard->charts()->get();
+
+        // Execute queries for each chart
+        $chartsData = $charts->map(function ($chart) use ($queryRunner) {
+            try {
+                $results = $queryRunner->runQuery($chart->raw_query);
+                $chart->setAttribute('data', $results);
+            } catch (\Exception $e) {
+                $chart->setAttribute('data', []);
+                $chart->setAttribute('query_error', $e->getMessage());
+            }
+            return $chart;
+        });
+
+        $dashboard->setRelation('charts', $chartsData);
+
+        return response()->json([
+            'success' => true,
+            'data' => $dashboard
+        ]);
+    }
 }

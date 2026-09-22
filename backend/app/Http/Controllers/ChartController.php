@@ -184,57 +184,5 @@ class ChartController extends Controller
         ]);
     }
 
-    /**
-     * Generate or re-generate an embed token for a chart
-     */
-    public function generateToken($id)
-    {
-        $this->requireAnalyst();
-        $chart = Chart::find($id);
 
-        if (!$chart) {
-            return response()->json(['success' => false, 'message' => 'Grafik tidak ditemukan'], 404);
-        }
-
-        // Generate token acak 40 karakter
-        $chart->embed_token = Str::random(40);
-        $chart->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Token berhasil dibuat.',
-            'embed_token' => $chart->embed_token
-        ]);
-    }
-
-    /**
-     * PUBLIC API: Get chart by embed token (No Auth Required)
-     */
-    public function getChartByToken($token, QueryRunnerService $queryRunner)
-    {
-        $chart = Chart::where('embed_token', $token)->first();
-
-        if (!$chart) {
-            return response()->json(['success' => false, 'message' => 'Token tidak valid atau grafik telah dihapus.'], 404);
-        }
-
-        try {
-            $results = $queryRunner->runQuery($chart->raw_query);
-            $chart->data = $results;
-        } catch (\Exception $e) {
-            $chart->data = [];
-            $chart->query_error = $e->getMessage();
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'title' => $chart->title,
-                'description' => $chart->description,
-                'chart_type' => $chart->chart_type,
-                'config' => $chart->config,
-                'data' => $chart->data
-            ]
-        ]);
-    }
 }

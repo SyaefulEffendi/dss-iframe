@@ -29,6 +29,9 @@ const DashboardEditor = () => {
   const [availableCharts, setAvailableCharts] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
 
+  const [generating, setGenerating] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     fetchDashboardData();
     if (isAnalyst) {
@@ -104,6 +107,29 @@ const DashboardEditor = () => {
     }
   };
 
+  const generateToken = async () => {
+    setGenerating(true);
+    try {
+      const response = await axios.post(`/api/dashboards/${id}/token`);
+      if (response.data.success) {
+        setDashboard({ ...dashboard, embed_token: response.data.embed_token });
+        MySwal.fire({ icon: 'success', title: 'Token Dibuat!', toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
+      }
+    } catch (err) {
+      MySwal.fire('Error', 'Gagal membuat token.', 'error');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    const embedUrl = `${window.location.origin}/embed/dashboard/${dashboard.embed_token}`;
+    const iframeCode = `<iframe src="${embedUrl}" width="100%" height="800" frameborder="0"></iframe>`;
+    navigator.clipboard.writeText(iframeCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const addChartToDashboard = async (chartToAdd) => {
     if (charts.find(c => c.id === chartToAdd.id)) {
       MySwal.fire('Info', 'Grafik sudah ada di dashboard ini', 'info');
@@ -159,6 +185,9 @@ const DashboardEditor = () => {
         
         {isAnalyst && (
           <div className="editor-actions">
+            <button className="btn-add" onClick={generateToken} disabled={generating} style={{ backgroundColor: '#8b5cf6' }}>
+              {generating ? 'Memproses...' : (dashboard.embed_token ? 'Regenerate Token' : 'Generate Token')}
+            </button>
             <button className="btn-add" onClick={() => setShowAddModal(true)}>
               <Plus size={18} /> Tambah Grafik
             </button>
@@ -168,6 +197,24 @@ const DashboardEditor = () => {
           </div>
         )}
       </div>
+
+      {dashboard.embed_token && (
+        <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #e5e7eb' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <span style={{ fontWeight: '600', color: '#374151' }}>Kode Embed (Iframe)</span>
+            <button 
+              onClick={copyToClipboard}
+              style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer', backgroundColor: '#e5e7eb', border: 'none', borderRadius: '4px' }}
+            >
+              {copied ? 'Tersalin!' : 'Copy Code'}
+            </button>
+          </div>
+          <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#6b7280' }}>Salin kode HTML di bawah ini dan tempel ke website Anda:</p>
+          <div style={{ backgroundColor: '#f3f4f6', padding: '10px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '13px', color: '#1f2937', overflowX: 'auto' }}>
+            {`<iframe src="${window.location.origin}/embed/dashboard/${dashboard.embed_token}" width="100%" height="800" frameborder="0"></iframe>`}
+          </div>
+        </div>
+      )}
 
       <div className="editor-canvas">
         {charts.length === 0 ? (

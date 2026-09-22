@@ -16,7 +16,7 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 // Public Embed Route
-Route::get('/public/charts/{token}', [ChartController::class, 'getChartByToken']);
+Route::get('/public/dashboards/{token}', [DashboardController::class, 'getDashboardByToken']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/dashboards/{id}', [DashboardController::class, 'update']);
     Route::delete('/dashboards/{id}', [DashboardController::class, 'destroy']);
     Route::post('/dashboards/{id}/sync', [DashboardController::class, 'syncCharts']);
+    Route::post('/dashboards/{id}/token', [DashboardController::class, 'generateToken']);
 
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);
@@ -59,7 +60,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/charts', [ChartController::class, 'store']);
     Route::get('/charts/{id}', [ChartController::class, 'show']);
     Route::put('/charts/{id}', [ChartController::class, 'update']);
-    Route::post('/charts/{id}/token', [ChartController::class, 'generateToken']);
     Route::post('/charts/run-query', [ChartController::class, 'runQuery']);
     Route::delete('/charts/{id}', [ChartController::class, 'destroy']);
 });

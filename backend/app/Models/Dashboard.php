@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dashboard extends Model
 {
-    protected $fillable = ['title', 'creator_id'];
+    protected $fillable = ['title', 'creator_id', 'embed_token'];
 
     public function creator()
     {

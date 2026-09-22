@@ -16,7 +16,6 @@ class Chart extends Model
         'chart_type',
         'config',
         'creator_id',
-        'embed_token',
         'cache_ttl_seconds'
     ];
 

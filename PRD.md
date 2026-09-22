@@ -55,9 +55,9 @@ Tujuan dari project ini adalah:
     *   **AC:** Terdapat halaman Dashboard Editor berbasis Grid (menggunakan react-grid-layout) di mana Analis bisa memilih grafik dari "pool", menariknya ke dalam kanvas, mengatur lebarnya, lalu menyimpan layout (posisi & ukuran) ke database.
 
 ### Iframe Embedding (Eksternal / Integrasi)
-*   **Story:** Sebagai Data Analis, saya mau men-generate token embed untuk grafik tertentu supaya grafiknya bisa dipasang di website eksternal tanpa harus login.
-    *   **AC:** Terdapat tombol "Generate Embed Token" pada halaman detail grafik. Saat diklik, sistem membuat `embed_token` unik (random string, minimal 32 karakter) dan menampilkan tag siap-copy: `<iframe src="[API_URL]/embed/{embed_token}"></iframe>`.
-*   **Story:** Sebagai Data Analis, saya mau bisa mencabut/mengganti token embed yang sudah pernah dibagikan supaya kalau token bocor atau grafik ditarik dari publikasi, akses lama langsung mati.
+*   **Story:** Sebagai Data Analis, saya mau men-generate token embed untuk sebuah *Dashboard* supaya dashboard tersebut bisa dipasang di website eksternal tanpa harus login.
+    *   **AC:** Terdapat tombol "Generate Token" pada halaman Dashboard Editor. Saat diklik, sistem membuat `embed_token` unik (random string, minimal 32 karakter) dan menampilkan tag siap-copy: `<iframe src="[API_URL]/embed/dashboard/{embed_token}"></iframe>`.
+*   **Story:** Sebagai Data Analis, saya mau bisa mencabut/mengganti token embed yang sudah pernah dibagikan supaya kalau token bocor, akses lama langsung mati.
     *   **AC:** Terdapat tombol "Regenerate Token". Token lama otomatis invalid begitu token baru dibuat. Endpoint embed dengan token lama mengembalikan 404/410.
 
 ## 5. Functional Requirements
@@ -92,9 +92,9 @@ Tujuan dari project ini adalah:
 - **[BARU] Caching:** Hasil eksekusi query untuk sebuah chart dapat di-cache selama durasi tertentu (rekomendasi default: 5 menit) untuk mengurangi beban database saat dashboard dibuka berulang kali. Cache di-invalidasi otomatis saat masa berlaku habis.
 
 **5.5. Modul Embed / Iframe**
-- Sistem harus dapat men-generate `embed_token` unik (random string) per chart untuk akses publik tanpa login.
-- Endpoint publik embed (`GET /api/embed/{embed_token}`) mengembalikan data & konfigurasi chart tanpa memerlukan session/JWT — validasi otorisasi dilakukan murni berdasarkan kecocokan token dengan yang tersimpan di database.
-- Sistem harus menyediakan kode snippet HTML berbentuk `<iframe src="..."></iframe>` yang siap disalin oleh pengguna dari halaman detail chart.
+- Sistem harus dapat men-generate `embed_token` unik (random string) per *dashboard* untuk akses publik tanpa login.
+- Endpoint publik embed (`GET /api/public/dashboards/{embed_token}`) mengembalikan data dashboard beserta seluruh grafik dan konfigurasinya tanpa memerlukan session/JWT — validasi otorisasi dilakukan murni berdasarkan kecocokan token dengan yang tersimpan di database.
+- Sistem harus menyediakan kode snippet HTML berbentuk `<iframe src="..."></iframe>` yang siap disalin oleh pengguna dari halaman Dashboard Editor.
 - Data Analis dapat me-regenerate token kapan saja; begitu token baru dibuat, token lama langsung tidak valid (di-overwrite, bukan disimpan sebagai histori).
 
 **5.6. [BARU] Audit Log (opsional, lihat Bab 7 untuk status scope)**
@@ -169,7 +169,7 @@ dss-project/
 3. **Fetching Dashboard:** Laravel menyeleksi tabel `charts` dengan mencocokkan `role_id` user pada tabel *pivot* `chart_role` — seluruh chart yang cocok otomatis dikembalikan sebagai isi dashboard.
 4. **Eksekusi Query (Dynamic):** Untuk setiap grafik yang diizinkan, Laravel mengecek cache terlebih dahulu; bila cache kosong/kedaluwarsa, Laravel menjalankan `raw_query` milik grafik tersebut pada database menggunakan mode *Read-Only* dengan timeout, lalu menyimpan hasilnya ke cache.
 5. **Response & Render:** Laravel mengembalikan JSON berisi meta grafik (tipe, sumbu X/Y) dan array data. ReactJS menerimanya dan me-render komponen grafik (misal menggunakan Recharts).
-6. **[BARU] Flow Embed:** Pihak eksternal memuat `<iframe src="[API_URL]/embed/{embed_token}">`. Laravel mencocokkan token ke chart terkait (tanpa cek session), lalu mengembalikan data chart dengan alur eksekusi/caching yang sama seperti poin 4.
+6. **[BARU] Flow Embed:** Pihak eksternal memuat `<iframe src="[API_URL]/embed/dashboard/{embed_token}">`. Laravel mencocokkan token ke dashboard terkait (tanpa cek session), lalu mengembalikan data dashboard beserta *charts* dengan alur eksekusi/caching yang sama seperti poin 4.
 
 ## 11. Keputusan Teknis (Technical Decisions)
 - **Mengapa memisah Backend (Laravel) dan Frontend (ReactJS)?** Agar API Laravel murni berfungsi sebagai penyedia data (JSON) dan *query runner*. ReactJS dipilih di *frontend* karena ekosistem *library* grafiknya sangat kaya, interaktif, dan optimal untuk me-render banyak grafik berat dalam satu *dashboard* tanpa *reload* halaman.
@@ -198,10 +198,9 @@ Database Relasional (MySQL/PostgreSQL) difokuskan pada manajemen aplikasi dan RB
   - `chart_type` (Enum: bar, pie, line, area, scatter, radar, gauge, heatmap)
   - `config` (JSON - menyimpan setting sumbu X/Y, warna)
   - `creator_id` (Foreign Key ke `users`)
-  - `embed_token` (String, unique, nullable — diisi saat Data Analis generate embed)
   - `cache_ttl_seconds` (Integer, default 300 — durasi cache hasil query)
 - **`chart_role` (Pivot Table)**: `chart_id`, `role_id` (Menentukan *role* mana saja yang bisa melihat grafik ini).
-- **`dashboards`**: `id`, `title`, `creator_id`, `created_at`, `updated_at`.
+- **`dashboards`**: `id`, `title`, `creator_id`, `embed_token`, `created_at`, `updated_at`.
 - **`dashboard_chart` (Pivot Table)**: `dashboard_id`, `chart_id`, `layout_config` (JSON untuk menyimpan posisi Grid/Grid Layout).
 - **`activity_logs`** *(opsional, lihat Bab 7)*: `id`, `user_id`, `action`, `target_type`, `target_id`, `created_at`.
 

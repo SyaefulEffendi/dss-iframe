@@ -77,20 +77,7 @@ const ChartDetail = () => {
     }
   };
 
-  const generateToken = async () => {
-    setGenerating(true);
-    try {
-      const response = await axios.post(`/api/charts/${id}/token`);
-      if (response.data.success) {
-        setChart({ ...chart, embed_token: response.data.embed_token });
-        MySwal.fire({ icon: 'success', title: 'Token Dibuat!', toast: true, position: 'top-end', timer: 3000, showConfirmButton: false });
-      }
-    } catch (err) {
-      MySwal.fire('Error', 'Gagal membuat token.', 'error');
-    } finally {
-      setGenerating(false);
-    }
-  };
+
 
   const copyToClipboard = () => {
     const embedUrl = `${window.location.origin}/embed/${chart.embed_token}`;
@@ -229,10 +216,7 @@ const ChartDetail = () => {
               <button className="edit-mode-btn" onClick={() => setIsEditing(true)}>
                 <Edit3 size={18} /> Edit Grafik
               </button>
-              <button className="generate-token-btn" onClick={generateToken} disabled={generating}>
-                <Code size={18} />
-                {generating ? 'Memproses...' : (chart.embed_token ? 'Regenerate Iframe Token' : 'Generate Iframe Token')}
-              </button>
+
             </>
           )}
         </div>
@@ -309,18 +293,7 @@ const ChartDetail = () => {
         </div>
       )}
 
-      {!isEditing && chart.embed_token && (
-        <div className="embed-code-box">
-          <button className="copy-btn" onClick={copyToClipboard}>
-            {copied ? <CheckCircle size={14} color="#10b981" /> : <Copy size={14} />}
-            {copied ? 'Tersalin!' : 'Copy Code'}
-          </button>
-          <p>Salin kode HTML di bawah ini dan tempel ke website Anda:</p>
-          <div className="code-snippet">
-            {`<iframe src="${window.location.origin}/embed/${chart.embed_token}" width="100%" height="500" frameborder="0"></iframe>`}
-          </div>
-        </div>
-      )}
+
 
       <div className="visualization-card">
         {chart.query_error ? (

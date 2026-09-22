@@ -9,7 +9,7 @@ import DashboardEditor from './pages/Dashboard/DashboardEditor';
 import ChartsList from './pages/Charts/ChartsList';
 import ChartBuilder from './pages/Charts/ChartBuilder';
 import ChartDetail from './pages/Charts/ChartDetail';
-import IframeEmbed from './pages/Embed/IframeEmbed';
+import DashboardEmbed from './pages/Embed/DashboardEmbed';
 import RolesList from './pages/Roles/RolesList';
 import UsersList from './pages/Users/UsersList';
 import Settings from './pages/Settings/Settings';
@@ -90,7 +90,7 @@ const AppRoutes = () => {
       )}
       
       {/* PUBLIC ROUTE FOR IFRAME */}
-      <Route path="/embed/:token" element={<IframeEmbed />} />
+      <Route path="/embed/dashboard/:token" element={<DashboardEmbed />} />
 
       {/* Settings Route (Available to all logged in users) */}
       <Route path="/settings" element={
