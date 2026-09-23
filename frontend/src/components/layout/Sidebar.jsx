@@ -70,13 +70,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </li>
             </>
           )}
-          {!isAnalyst && user?.pinnedDashboards && user.pinnedDashboards.length > 0 && (
+          {!isAnalyst && user?.pinned_dashboards && user.pinned_dashboards.length > 0 && (
             <li className="pinned-dashboards-section" style={{ marginTop: '1rem' }}>
               <div style={{ padding: '0.5rem 1rem', fontSize: '0.75rem', textTransform: 'uppercase', color: '#9ca3af', fontWeight: 'bold' }}>
                 Pinned Dashboards
               </div>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                {user.pinnedDashboards.map(pd => (
+                {user.pinned_dashboards.map(pd => (
                   <li key={pd.id}>
                     <NavLink to={`/dashboard/${pd.id}`} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={handleLinkClick}>
                       <LayoutDashboard size={16} />

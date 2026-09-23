@@ -198,8 +198,8 @@ const DashboardsList = () => {
                       </button>
                       {!isAnalyst && (
                         <button 
-                          className={`btn-icon ${user?.pinnedDashboards?.find(p => p.id === dashboard.id) ? 'btn-unpin' : 'btn-pin'}`} 
-                          title={user?.pinnedDashboards?.find(p => p.id === dashboard.id) ? 'Unpin Dashboard' : 'Pin Dashboard'}
+                          className={`btn-icon ${user?.pinned_dashboards?.find(p => p.id === dashboard.id) ? 'btn-unpin' : 'btn-pin'}`} 
+                          title={user?.pinned_dashboards?.find(p => p.id === dashboard.id) ? 'Unpin Dashboard' : 'Pin Dashboard'}
                           onClick={async () => {
                             try {
                               const res = await axios.post(`/api/dashboards/${dashboard.id}/pin`);
@@ -218,7 +218,7 @@ const DashboardsList = () => {
                             } catch (e) {}
                           }}
                         >
-                          <Pin size={16} fill={user?.pinnedDashboards?.find(p => p.id === dashboard.id) ? "currentColor" : "none"} />
+                          <Pin size={16} fill={user?.pinned_dashboards?.find(p => p.id === dashboard.id) ? "currentColor" : "none"} />
                         </button>
                       )}
                       {isAnalyst && (
