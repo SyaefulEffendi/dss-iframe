@@ -198,7 +198,7 @@ const DashboardEditor = () => {
         )}
       </div>
 
-      {dashboard.embed_token && (
+      {isAnalyst && dashboard.embed_token && (
         <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #e5e7eb' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
             <span style={{ fontWeight: '600', color: '#374151' }}>Kode Embed (Iframe)</span>

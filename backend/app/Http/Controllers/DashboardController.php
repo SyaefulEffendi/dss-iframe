@@ -268,4 +268,24 @@ class DashboardController extends Controller
             'data' => $dashboard
         ]);
     }
+
+    public function togglePin(Request $request, $id)
+    {
+        $user = $request->user();
+        $dashboard = \App\Models\Dashboard::findOrFail($id);
+
+        if ($user->pinnedDashboards()->where('dashboard_id', $id)->exists()) {
+            $user->pinnedDashboards()->detach($id);
+            $message = 'Dashboard dilepas dari pin';
+        } else {
+            $user->pinnedDashboards()->attach($id);
+            $message = 'Dashboard berhasil di-pin';
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'pinned_dashboards' => $user->pinnedDashboards()->get()
+        ]);
+    }
 }

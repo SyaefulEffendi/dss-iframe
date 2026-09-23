@@ -70,21 +70,25 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </li>
             </>
           )}
-          <li>
-            <NavLink to="/settings" className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={handleLinkClick}>
-              <Settings size={20} />
-              <span>Settings</span>
-            </NavLink>
-          </li>
+          {!isAnalyst && user?.pinnedDashboards && user.pinnedDashboards.length > 0 && (
+            <li className="pinned-dashboards-section" style={{ marginTop: '1rem' }}>
+              <div style={{ padding: '0.5rem 1rem', fontSize: '0.75rem', textTransform: 'uppercase', color: '#9ca3af', fontWeight: 'bold' }}>
+                Pinned Dashboards
+              </div>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {user.pinnedDashboards.map(pd => (
+                  <li key={pd.id}>
+                    <NavLink to={`/dashboard/${pd.id}`} className={({isActive}) => isActive ? 'nav-link active' : 'nav-link'} onClick={handleLinkClick}>
+                      <LayoutDashboard size={16} />
+                      <span style={{ fontSize: '0.875rem' }}>{pd.title}</span>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          )}
         </ul>
       </nav>
-
-      <div className="sidebar-footer">
-        <button onClick={handleLogout} className="nav-link logout-link" style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 'inherit' }}>
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
-      </div>
     </aside>
   );
 };

@@ -28,7 +28,7 @@ const DashboardEmbed = () => {
             if (typeof conf === 'string') {
               try { conf = JSON.parse(conf); } catch(e) {}
             }
-            return conf || { i: `chart_${c.id}`, x: (i * 6) % 12, y: Infinity, w: 6, h: 4 };
+            return { ...(conf || { x: (i * 6) % 12, y: Infinity, w: 6, h: 4 }), i: `chart_${c.id}`, static: true };
           });
           setLayout(initialLayout);
         }

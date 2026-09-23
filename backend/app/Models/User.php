@@ -32,6 +32,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function pinnedDashboards()
+    {
+        return $this->belongsToMany(Dashboard::class, 'dashboard_user')->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

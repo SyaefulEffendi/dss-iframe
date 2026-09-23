@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/dashboards/{id}', [DashboardController::class, 'destroy']);
     Route::post('/dashboards/{id}/sync', [DashboardController::class, 'syncCharts']);
     Route::post('/dashboards/{id}/token', [DashboardController::class, 'generateToken']);
+    Route::post('/dashboards/{id}/pin', [DashboardController::class, 'togglePin']);
 
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);

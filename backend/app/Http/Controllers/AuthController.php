@@ -35,7 +35,7 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return response()->json($request->user()->load('role'));
+        return response()->json($request->user()->load(['role', 'pinnedDashboards']));
     }
 
     public function logout(Request $request)

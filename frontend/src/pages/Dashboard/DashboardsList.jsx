@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Plus, Edit2, Trash2, LayoutDashboard, Eye } from 'lucide-react';
+import { Search, Plus, Edit2, Trash2, LayoutDashboard, Eye, Pin } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -196,6 +196,33 @@ const DashboardsList = () => {
                       >
                         <Eye size={16} />
                       </button>
+                      {!isAnalyst && (
+                        <button 
+                          className={`btn-icon ${user?.pinnedDashboards?.find(p => p.id === dashboard.id) ? 'btn-unpin' : 'btn-pin'}`} 
+                          title={user?.pinnedDashboards?.find(p => p.id === dashboard.id) ? 'Unpin Dashboard' : 'Pin Dashboard'}
+                          onClick={async () => {
+                            try {
+                              const res = await axios.post(`/api/dashboards/${dashboard.id}/pin`);
+                              if (res.data.success) {
+                                // Update user context manually by refreshing page or just show toast
+                                MySwal.fire({
+                                  icon: 'success',
+                                  title: 'Berhasil',
+                                  text: res.data.message,
+                                  toast: true,
+                                  position: 'top-end',
+                                  showConfirmButton: false,
+                                  timer: 3000
+                                });
+                                // Force reload to update context for simplicity, or we can update Context if we had a method
+                                window.location.reload();
+                              }
+                            } catch (e) {}
+                          }}
+                        >
+                          <Pin size={16} fill={user?.pinnedDashboards?.find(p => p.id === dashboard.id) ? "currentColor" : "none"} />
+                        </button>
+                      )}
                       {isAnalyst && (
                         <>
                           <button 

@@ -90,6 +90,10 @@ Tujuan dari project ini adalah:
 - Data Analis dapat merakit satu dashboard berisi berbagai kombinasi grafik yang mereka buat melalui antarmuka *Drag & Drop* (menggunakan library `react-grid-layout`).
 - Konfigurasi tata letak (X, Y, Lebar, Tinggi) dari masing-masing grafik disimpan di tabel pivot `dashboard_chart`.
 - **[BARU] Caching:** Hasil eksekusi query untuk sebuah chart dapat di-cache selama durasi tertentu (rekomendasi default: 5 menit) untuk mengurangi beban database saat dashboard dibuka berulang kali. Cache di-invalidasi otomatis saat masa berlaku habis.
+- **[BARU] Pinned Dashboards:** User End User (Non-Analis) dapat menge-pin (menyematkan) dashboard favorit mereka dari daftar Dashboard. Dashboard yang di-pin akan muncul sebagai *shortcut* di dalam menu navigasi *Sidebar*.
+
+**5.4.1 Navigasi & Tampilan Profil**
+- Navigasi utama aplikasi menggunakan *Sidebar* tersembunyi (untuk mobile) dan *Top Navbar*. Menu khusus *Settings* dan opsi *Logout* diletakkan pada menu dropdown profil pengguna di pojok kanan atas layar demi efisiensi tata letak.
 
 **5.5. Modul Embed / Iframe**
 - Sistem harus dapat men-generate `embed_token` unik (random string) per *dashboard* untuk akses publik tanpa login.

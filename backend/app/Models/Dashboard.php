@@ -19,4 +19,9 @@ class Dashboard extends Model
             ->withPivot('layout_config')
             ->withTimestamps();
     }
+
+    public function pinnedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'dashboard_user')->withTimestamps();
+    }
 }
