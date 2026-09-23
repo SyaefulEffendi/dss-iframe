@@ -14,7 +14,7 @@ const DashboardsList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext) || {};
+  const { user, fetchUser } = useContext(AuthContext) || {};
   
   const isAnalyst = user?.role?.name === 'Data Analyst';
 
@@ -204,7 +204,6 @@ const DashboardsList = () => {
                             try {
                               const res = await axios.post(`/api/dashboards/${dashboard.id}/pin`);
                               if (res.data.success) {
-                                // Update user context manually by refreshing page or just show toast
                                 MySwal.fire({
                                   icon: 'success',
                                   title: 'Berhasil',
@@ -214,8 +213,7 @@ const DashboardsList = () => {
                                   showConfirmButton: false,
                                   timer: 3000
                                 });
-                                // Force reload to update context for simplicity, or we can update Context if we had a method
-                                window.location.reload();
+                                if (fetchUser) await fetchUser();
                               }
                             } catch (e) {}
                           }}
