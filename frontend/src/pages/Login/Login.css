@@ -25,7 +25,7 @@
 .logo-icon {
   background-color: white;
   padding: 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,21 +37,22 @@
 }
 
 .login-hero-content {
-  margin-top: -4rem; /* Adjusting vertical centering slightly */
+  margin-top: -2rem;
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
 }
 
 .hero-subtitle {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8);
-  max-width: 90%;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 88%;
 }
 
 .login-security-badge {
@@ -75,7 +76,7 @@
 .login-card {
   background-color: var(--bg-white);
   padding: 3rem;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 480px;
@@ -128,7 +129,7 @@ input[type="text"] {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-light);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
@@ -137,8 +138,8 @@ input[type="text"] {
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="text"]:focus {
-  border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(110, 56, 247, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .password-input-wrapper {
@@ -160,7 +161,7 @@ input[type="text"]:focus {
 }
 
 .toggle-password:hover {
-  color: var(--primary-purple);
+  color: var(--primary-color);
 }
 
 .form-checkbox {
@@ -173,7 +174,7 @@ input[type="text"]:focus {
 .form-checkbox input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--primary-purple);
+  accent-color: var(--primary-color);
   cursor: pointer;
 }
 
@@ -185,10 +186,10 @@ input[type="text"]:focus {
 
 .login-submit-btn {
   width: 100%;
-  background-color: var(--primary-purple);
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   padding: 0.875rem;
   font-size: 1rem;
   font-weight: 600;
@@ -272,3 +273,4 @@ input[type="text"]:focus {
     background-color: var(--bg-white);
   }
 }
+

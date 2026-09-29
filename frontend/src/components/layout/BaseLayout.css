@@ -27,8 +27,8 @@
 }
 
 .brand-icon {
-  background-color: var(--primary-purple);
-  border-radius: 8px;
+  background-color: var(--primary-color);
+  border-radius: var(--radius-lg);
   padding: 0.4rem;
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   color: var(--text-gray);
   font-weight: 500;
   transition: all 0.2s;
@@ -73,8 +73,9 @@
 }
 
 .nav-link.active {
-  background-color: rgba(110, 56, 247, 0.1);
-  color: var(--primary-purple);
+  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 .sidebar-footer {
@@ -160,12 +161,13 @@
 }
 
 .role-badge {
-  background-color: rgba(110, 56, 247, 0.1);
-  color: var(--primary-purple);
-  padding: 0.35rem 0.75rem;
+  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--primary-color);
+  padding: 0.25rem 0.65rem;
   border-radius: 100px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .user-profile {
@@ -201,7 +203,7 @@
   right: 0;
   background-color: var(--bg-white);
   border: 1px solid var(--border-light);
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   min-width: 150px;
   display: flex;
@@ -230,7 +232,7 @@
   width: 100%;
   text-align: left;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   color: var(--text-dark);
   font-size: 0.9rem;
   font-weight: 500;
@@ -337,3 +339,4 @@
     padding: 0 1rem;
   }
 }
+

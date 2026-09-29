@@ -60,7 +60,7 @@ const Login = () => {
       <div className="login-left-panel">
         <div className="login-brand">
           <div className="logo-icon">
-            <BarChart2 size={24} color="var(--primary-purple)" />
+            <BarChart2 size={24} color="var(--primary-color)" />
           </div>
           <span className="logo-text">DSS Analytics</span>
         </div>
