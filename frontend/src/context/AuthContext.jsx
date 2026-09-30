@@ -1,5 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { ThemeContext } from './ThemeContext';
 
 // Konfigurasi axios global
 const apiHost = window.location.hostname;
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('auth_token') || null);
   const [loading, setLoading] = useState(true);
+  const themeContext = useContext(ThemeContext);
 
   // Jika ada token di localStorage, masukkan ke header axios
   if (token) {
@@ -67,6 +69,10 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('theme');
+    if (themeContext && themeContext.setTheme) {
+      themeContext.setTheme('light');
+    }
   };
 
   return (
