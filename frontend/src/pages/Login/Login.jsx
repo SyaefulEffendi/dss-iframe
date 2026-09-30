@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Eye, EyeOff, ShieldCheck, BarChart2 } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -25,7 +25,6 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
     const success = await login(email, password);
     setIsLoading(false);
 
@@ -43,7 +42,7 @@ const Login = () => {
     } else {
       MySwal.fire({
         title: 'Login Gagal!',
-        text: 'Email atau Password salah.',
+        text: 'Email atau password salah.',
         icon: 'error',
         toast: true,
         position: 'top-end',
@@ -55,87 +54,106 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      {/* Left Panel - Branding & Info */}
-      <div className="login-left-panel">
-        <div className="login-brand">
-          <div className="logo-icon">
-            <BarChart2 size={24} color="var(--primary-color)" />
+    <div className="login-page">
+      {/* Left — Editorial panel */}
+      <div className="login-editorial">
+        <div className="editorial-inner">
+          <div className="login-wordmark">
+            <span className="wordmark-dot"></span>
+            DSS Analytics
           </div>
-          <span className="logo-text">DSS Analytics</span>
+
+          <div className="editorial-headline">
+            <p className="editorial-eyebrow">Platform Analitik</p>
+            <h1 className="editorial-title">
+              Data jadi<br />
+              <em>keputusan.</em>
+            </h1>
+          </div>
+
+          <div className="editorial-meta">
+            <div className="meta-line">Role-based access</div>
+            <div className="meta-line">Dashboard interaktif</div>
+            <div className="meta-line">Embed & ekspor</div>
+          </div>
         </div>
 
-        <div className="login-hero-content">
-          <h1 className="hero-title">Powering decisions for executive leadership.</h1>
-          <p className="hero-subtitle">
-            Experience role-based intelligence built specifically for data analysts and key executive decision makers. Turn raw datasets into structural strategy.
-          </p>
-        </div>
-
-        <div className="login-security-badge">
-          <ShieldCheck size={20} />
-          <span>Enterprise Grade Role-Based Access Control Active</span>
+        {/* Decorative grid */}
+        <div className="editorial-grid" aria-hidden="true">
+          {Array.from({ length: 80 }).map((_, i) => (
+            <div key={i} className="grid-dot" />
+          ))}
         </div>
       </div>
 
-      {/* Right Panel - Login Form */}
-      <div className="login-right-panel">
-        <div className="login-card">
-          <div className="login-card-header">
-            <h2>Sign In</h2>
-            <p>Access the Decision Support dashboard</p>
+      {/* Right — Form panel */}
+      <div className="login-form-panel">
+        <div className="login-form-inner">
+          <div className="form-header">
+            <h2>Masuk</h2>
+            <p>Akses dashboard Anda</p>
           </div>
 
-          <form className="login-form" onSubmit={handleLogin}>
-            <div className="form-group">
-              <label htmlFor="email">Email Address</label>
-              <input 
-                type="email" 
-                id="email" 
-                placeholder="ceo@dssanalytics.com" 
+          <form onSubmit={handleLogin} noValidate>
+            <div className="field-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="nama@perusahaan.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required 
+                required
+                autoComplete="email"
               />
             </div>
 
-            <div className="form-group">
-              <div className="password-header">
+            <div className="field-group">
+              <div className="field-label-row">
                 <label htmlFor="password">Password</label>
-                <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+                <Link to="/forgot-password" className="link-forgot">Lupa password?</Link>
               </div>
-              <div className="password-input-wrapper">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  id="password" 
-                  placeholder="••••••••••••" 
+              <div className="field-password">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required 
+                  required
+                  autoComplete="current-password"
                 />
-                <button 
-                  type="button" 
-                  className="toggle-password"
+                <button
+                  type="button"
+                  className="btn-toggle-pw"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            <div className="form-checkbox">
-              <input type="checkbox" id="keep-signed-in" />
-              <label htmlFor="keep-signed-in">Keep me signed in</label>
-            </div>
-
-            <button type="submit" className="login-submit-btn">
-              Sign In to Dashboard
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className="btn-loading">
+                  <span className="spinner" />
+                  Memproses...
+                </span>
+              ) : (
+                'Masuk ke Dashboard'
+              )}
             </button>
           </form>
 
-          <div className="login-card-footer">
-            <p>Need analytical dashboard access? <a href="#">Request Role</a></p>
-          </div>
+          <p className="form-footer">
+            Belum punya akses?{' '}
+            <a href="#">Hubungi administrator</a>
+          </p>
         </div>
       </div>
     </div>
