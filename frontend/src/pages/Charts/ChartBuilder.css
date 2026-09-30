@@ -47,7 +47,7 @@
 
 /* Editor Section */
 .editor-section {
-  background-color: #1e1e1e;
+  background-color: var(--bg-light);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -57,16 +57,16 @@
 }
 
 .editor-header {
-  background-color: #2d2d2d;
+  background-color: var(--bg-white);
   padding: 0.75rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #3d3d3d;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .editor-title {
-  color: #e0e0e0;
+  color: var(--text-dark);
   font-size: 0.9rem;
   font-weight: 500;
   display: flex;
@@ -101,8 +101,8 @@
 .sql-textarea {
   width: 100%;
   min-height: 200px;
-  background-color: #1e1e1e;
-  color: #d4d4d4;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   font-size: 1rem;
   padding: 1.5rem;
@@ -195,7 +195,7 @@
 .empty-results {
   padding: 3rem 2rem;
   text-align: center;
-  color: #888;
+  color: var(--text-gray);
 }
 
 .empty-results p {
