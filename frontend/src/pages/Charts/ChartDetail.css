@@ -155,7 +155,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #6366f1;
+  background-color: var(--primary-purple);
   color: white;
   border: none;
   padding: 0.75rem 1.25rem;
@@ -165,7 +165,7 @@
 }
 
 .save-edit-btn:hover:not(:disabled) {
-  background-color: #4f46e5;
+  background-color: var(--primary-hover);
 }
 
 .save-edit-btn:disabled {
@@ -190,7 +190,7 @@
 }
 
 .edit-input-title:focus {
-  border-color: #6366f1;
+  border-color: var(--primary-purple);
 }
 
 .edit-input-desc {

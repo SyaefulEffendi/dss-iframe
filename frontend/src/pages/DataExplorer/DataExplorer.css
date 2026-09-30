@@ -20,7 +20,7 @@
 }
 
 .explorer-header h2 i {
-    color: #4f46e5;
+    color: var(--primary-hover);
 }
 
 .explorer-header p {
@@ -87,11 +87,11 @@
 
 .table-item.active {
     background-color: #e0e7ff;
-    color: #4f46e5;
+    color: var(--primary-hover);
 }
 
 .table-item.active i {
-    color: #4f46e5;
+    color: var(--primary-hover);
 }
 
 /* Main Content */
@@ -150,7 +150,7 @@
 }
 
 .preview-header h3 span {
-    color: #4f46e5;
+    color: var(--primary-hover);
     font-weight: 700;
 }
 
@@ -211,7 +211,7 @@
 
 .spinner {
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #4f46e5;
+    border-top: 3px solid var(--primary-hover);
     border-radius: 50%;
     width: 24px;
     height: 24px;

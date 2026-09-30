@@ -77,7 +77,7 @@
 }
 
 .create-btn:hover {
-  background-color: #5a2bd9;
+  background-color: var(--primary-hover);
 }
 
 .charts-card {

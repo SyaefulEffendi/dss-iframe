@@ -261,14 +261,14 @@
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 999px;
-  background-color: rgba(99, 102, 241, 0.2);
+  background-color: rgba(0, 123, 255, 0.25);
   color: #818cf8;
   text-transform: uppercase;
 }
 
 .available-chart-item button {
   padding: 0.5rem 1rem;
-  background-color: #6366f1;
+  background-color: var(--primary-purple);
   color: white;
   border: none;
   border-radius: 6px;
@@ -277,7 +277,7 @@
 }
 
 .available-chart-item button:hover {
-  background-color: #4f46e5;
+  background-color: var(--primary-hover);
 }
 
 /* React Grid Layout overrides */
