@@ -66,15 +66,15 @@ const Login = () => {
         </div>
 
         <div className="login-hero-content">
-          <h1 className="hero-title">Powering decisions for executive leadership.</h1>
+          <h1 className="hero-title">Sistem Pendukung Keputusan</h1>
           <p className="hero-subtitle">
-            Experience role-based intelligence built specifically for data analysts and key executive decision makers. Turn raw datasets into structural strategy.
+            Kelola dan analisis data dengan lebih mudah. Dirancang untuk membantu analis dan manajemen dalam mengambil keputusan strategis berbasis data.
           </p>
         </div>
 
         <div className="login-security-badge">
           <ShieldCheck size={20} />
-          <span>Enterprise Grade Role-Based Access Control Active</span>
+          <span>Keamanan sistem terjamin dengan akses berbasis peran</span>
         </div>
       </div>
 
@@ -82,17 +82,17 @@ const Login = () => {
       <div className="login-right-panel">
         <div className="login-card">
           <div className="login-card-header">
-            <h2>Sign In</h2>
-            <p>Access the Decision Support dashboard</p>
+            <h2>Masuk</h2>
+            <p>Silakan masuk untuk mengakses dashboard</p>
           </div>
 
           <form className="login-form" onSubmit={handleLogin}>
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">Alamat Email</label>
               <input 
                 type="email" 
                 id="email" 
-                placeholder="ceo@dssanalytics.com" 
+                placeholder="admin@perusahaan.com" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required 
@@ -101,8 +101,8 @@ const Login = () => {
 
             <div className="form-group">
               <div className="password-header">
-                <label htmlFor="password">Password</label>
-                <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+                <label htmlFor="password">Kata Sandi</label>
+                <Link to="/forgot-password" className="forgot-password">Lupa Kata Sandi?</Link>
               </div>
               <div className="password-input-wrapper">
                 <input 
@@ -125,16 +125,16 @@ const Login = () => {
 
             <div className="form-checkbox">
               <input type="checkbox" id="keep-signed-in" />
-              <label htmlFor="keep-signed-in">Keep me signed in</label>
+              <label htmlFor="keep-signed-in">Ingat saya</label>
             </div>
 
             <button type="submit" className="login-submit-btn">
-              Sign In to Dashboard
+              Masuk ke Dashboard
             </button>
           </form>
 
           <div className="login-card-footer">
-            <p>Need analytical dashboard access? <a href="#">Request Role</a></p>
+            <p>Belum memiliki akses? <a href="#">Hubungi Admin</a></p>
           </div>
         </div>
       </div>
