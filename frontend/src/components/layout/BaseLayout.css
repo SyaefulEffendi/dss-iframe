@@ -73,7 +73,7 @@
 }
 
 .nav-link.active {
-  background-color: rgba(110, 56, 247, 0.1);
+  background-color: rgba(0, 123, 255, 0.1);
   color: var(--primary-purple);
 }
 
@@ -160,7 +160,7 @@
 }
 
 .role-badge {
-  background-color: rgba(110, 56, 247, 0.1);
+  background-color: rgba(0, 123, 255, 0.1);
   color: var(--primary-purple);
   padding: 0.35rem 0.75rem;
   border-radius: 100px;

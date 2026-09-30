@@ -1,16 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 :root {
-  /* Primary Colors */
-  --primary-purple: #6E38F7;
-  --primary-hover: #5A2BC7;
-  --bg-gradient-start: #4A2B9A;
-  --bg-gradient-end: #311B65;
+  /* Corporate Flat Design Variables */
+  --primary-purple: #007BFF;
+  --primary-hover: #0056b3;
+  --bg-gradient-start: #007BFF;
+  --bg-gradient-end: #007BFF;
 
   /* Neutral Colors */
-  --bg-light: #F9FAFB;
+  --bg-light: #F8F9FA;
   --bg-white: #FFFFFF;
-  --text-dark: #1E1E1E;
-  --text-gray: #6B7280;
+  --text-dark: #343A40;
+  --text-gray: #6c757d;
   --border-light: #E5E7EB;
+
+  /* Semantic Colors */
+  --success: #28A745;
+  --warning: #FFC107;
+  --danger: #DC3545;
+  --info: #17A2B8;
 
   /* Spacing */
   --spacing-sm: 0.5rem;
@@ -18,18 +26,20 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* Flat Design Shadows & Corners */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 2px 12px rgba(0, 0, 0, 0.06);
+  
+  --radius-base: 4px;
 }
 
 [data-theme='dark'] {
-  --bg-light: #111827;
-  --bg-white: #1F2937;
-  --text-dark: #F9FAFB;
-  --text-gray: #9CA3AF;
-  --border-light: #374151;
+  --bg-light: #212529;
+  --bg-white: #343A40;
+  --text-dark: #F8F9FA;
+  --text-gray: #adb5bd;
+  --border-light: #495057;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
@@ -42,10 +52,31 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
   background-color: var(--bg-light);
   color: var(--text-dark);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
 }
 
 a {
@@ -58,7 +89,41 @@ a:hover {
   color: var(--primary-hover);
 }
 
-button {
+button, .btn {
   cursor: pointer;
-  font-family: inherit;
+  font-family: 'Lato', sans-serif;
+  border-radius: var(--radius-base);
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover, .btn:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-md);
+}
+
+button:active, .btn:active {
+  transform: translateY(1px);
+}
+
+/* Card Overrides */
+.card, .panel, .dashboard-card {
+  background-color: var(--bg-white);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+}
+
+/* Input Overrides */
+input, textarea, select {
+  font-family: 'Lato', sans-serif;
+  border-radius: var(--radius-base);
+  border: 1px solid var(--border-light);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }

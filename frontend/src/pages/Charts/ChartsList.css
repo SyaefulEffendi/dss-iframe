@@ -47,8 +47,8 @@
 }
 
 .search-box input:focus {
-  border-color: #6E38F7;
-  box-shadow: 0 0 0 2px rgba(110, 56, 247, 0.1);
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .search-icon {
@@ -63,11 +63,11 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #6E38F7;
+  background-color: var(--primary-purple);
   color: white;
   border: none;
   padding: 0.6rem 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--radius-base);
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
