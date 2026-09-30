@@ -36,7 +36,7 @@ const Navbar = ({ toggleSidebar }) => {
           <div className="user-profile">
             <span className="user-name">{user?.name || 'Loading...'}</span>
             <div className="avatar-placeholder">
-              <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=6E38F7&color=fff`} alt="User Avatar" />
+              <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'U')}&background=2563eb&color=fff&size=56`} alt="User Avatar" />
             </div>
           </div>
           <div className="user-dropdown">
