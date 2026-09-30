@@ -185,7 +185,7 @@ const DashboardEditor = () => {
         
         {isAnalyst && (
           <div className="editor-actions">
-            <button className="btn-add" onClick={generateToken} disabled={generating} style={{ backgroundColor: '#8b5cf6', color: '#ffffff' }}>
+            <button className="btn-embed" onClick={generateToken} disabled={generating}>
               {generating ? 'Memproses...' : (dashboard.embed_token ? 'Regenerate Token' : 'Generate Token')}
             </button>
             <button className="btn-add" onClick={() => setShowAddModal(true)}>
@@ -199,18 +199,15 @@ const DashboardEditor = () => {
       </div>
 
       {isAnalyst && dashboard.embed_token && (
-        <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #e5e7eb' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <span style={{ fontWeight: '600', color: '#374151' }}>Kode Embed (Iframe)</span>
-            <button 
-              onClick={copyToClipboard}
-              style={{ padding: '6px 12px', fontSize: '12px', cursor: 'pointer', backgroundColor: '#e5e7eb', border: 'none', borderRadius: '4px' }}
-            >
+        <div className="embed-code-container">
+          <div className="embed-code-header">
+            <span className="embed-code-title">Kode Embed (Iframe)</span>
+            <button className="embed-copy-btn" onClick={copyToClipboard}>
               {copied ? 'Tersalin!' : 'Copy Code'}
             </button>
           </div>
-          <p style={{ margin: '0 0 10px 0', fontSize: '13px', color: '#6b7280' }}>Salin kode HTML di bawah ini dan tempel ke website Anda:</p>
-          <div style={{ backgroundColor: '#f3f4f6', padding: '10px', borderRadius: '4px', fontFamily: 'monospace', fontSize: '13px', color: '#1f2937', overflowX: 'auto' }}>
+          <p className="embed-code-desc">Salin kode HTML di bawah ini dan tempel ke website Anda:</p>
+          <div className="embed-code-box">
             {`<iframe src="${window.location.origin}/embed/dashboard/${dashboard.embed_token}" width="100%" height="800" frameborder="0"></iframe>`}
           </div>
         </div>

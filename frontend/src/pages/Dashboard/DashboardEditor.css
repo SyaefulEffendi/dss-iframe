@@ -7,10 +7,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-white);
   padding: 1rem 1.5rem;
   border-radius: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-light);
 }
 
 .editor-title {
@@ -22,7 +22,7 @@
 .back-btn {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: var(--text-gray);
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 50%;
@@ -33,19 +33,19 @@
 }
 
 .back-btn:hover {
-  background-color: var(--border-color);
-  color: var(--text-primary);
+  background-color: var(--border-light);
+  color: var(--text-dark);
 }
 
 .editor-title h1 {
   margin: 0;
   font-size: 1.5rem;
-  color: var(--text-primary);
+  color: var(--text-dark);
 }
 
 .editor-title p {
   margin: 0.2rem 0 0 0;
-  color: var(--text-muted);
+  color: var(--text-gray);
   font-size: 0.9rem;
 }
 
@@ -77,7 +77,7 @@
 }
 
 .btn-save {
-  background-color: var(--primary-color);
+  background-color: var(--primary-purple);
   color: white;
 }
 
@@ -100,15 +100,15 @@
   align-items: center;
   justify-content: center;
   height: 400px;
-  border: 2px dashed var(--border-color);
+  border: 2px dashed var(--border-light);
   border-radius: 12px;
-  color: var(--text-secondary);
+  color: var(--text-gray);
 }
 
 .btn-add-large {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color);
+  background-color: var(--primary-purple);
   color: white;
   border: none;
   border-radius: 8px;
@@ -117,8 +117,8 @@
 }
 
 .chart-grid-item {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-light);
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -134,7 +134,7 @@
 
 .chart-card-header {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -152,7 +152,7 @@
 .chart-card-header h3 {
   margin: 0;
   font-size: 1rem;
-  color: var(--text-primary);
+  color: var(--text-dark);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -161,7 +161,7 @@
 .btn-remove-chart {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-gray);
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 4px;
@@ -203,12 +203,12 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-light);
 }
 
 .modal-header {
   padding: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -217,18 +217,18 @@
 .modal-header h2 {
   margin: 0;
   font-size: 1.25rem;
-  color: var(--text-primary);
+  color: var(--text-dark);
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: var(--text-gray);
   cursor: pointer;
 }
 
 .close-btn:hover {
-  color: var(--text-primary);
+  color: var(--text-dark);
 }
 
 .modal-body {
@@ -247,13 +247,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
 }
 
 .available-chart-item strong {
-  color: var(--text-primary);
+  color: var(--text-dark);
   margin-right: 1rem;
 }
 
@@ -282,7 +282,7 @@
 
 /* React Grid Layout overrides */
 .react-grid-item.react-grid-placeholder {
-  background: var(--primary-color);
+  background: var(--primary-purple);
   opacity: 0.2;
   border-radius: 12px;
 }
@@ -293,4 +293,75 @@
 
 .react-resizable-handle:hover {
   opacity: 1;
+}
+
+/* --- Embed Code Section --- */
+.btn-embed {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: var(--primary-purple);
+  color: white;
+}
+
+.btn-embed:hover {
+  background-color: var(--primary-hover);
+}
+
+.embed-code-container {
+  background-color: var(--bg-white);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-light);
+}
+
+.embed-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.embed-code-title {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.embed-copy-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.embed-copy-btn:hover {
+  background-color: var(--border-light);
+}
+
+.embed-code-desc {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: var(--text-gray);
+}
+
+.embed-code-box {
+  background-color: var(--bg-light);
+  padding: 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--text-dark);
+  overflow-x: auto;
+  border: 1px solid var(--border-light);
 }

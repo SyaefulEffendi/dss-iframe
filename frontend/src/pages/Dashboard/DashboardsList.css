@@ -14,12 +14,12 @@
 .dashboards-title h1 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-dark);
   margin: 0 0 0.5rem 0;
 }
 
 .dashboards-title p {
-  color: var(--text-secondary);
+  color: var(--text-gray);
   margin: 0;
   font-size: 0.95rem;
 }
@@ -39,22 +39,22 @@
 .search-icon {
   position: absolute;
   left: 1rem;
-  color: var(--text-muted);
+  color: var(--text-gray);
 }
 
 .search-box input {
   padding: 0.6rem 1rem 0.6rem 2.5rem;
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  background-color: var(--bg-white);
+  color: var(--text-dark);
   width: 250px;
   transition: all 0.2s;
 }
 
 .search-box input:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--primary-purple);
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
@@ -63,7 +63,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1.2rem;
-  background-color: var(--primary-color);
+  background-color: var(--primary-purple);
   color: white;
   border: none;
   border-radius: 8px;
@@ -78,9 +78,9 @@
 }
 
 .dashboards-card {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-white);
   border-radius: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-light);
   overflow: hidden;
 }
 
@@ -94,19 +94,19 @@
 }
 
 .empty-icon {
-  color: var(--text-muted);
+  color: var(--text-gray);
   margin-bottom: 1rem;
   opacity: 0.5;
 }
 
 .empty-state h3 {
   margin: 0 0 0.5rem 0;
-  color: var(--text-primary);
+  color: var(--text-dark);
   font-size: 1.2rem;
 }
 
 .empty-state p {
-  color: var(--text-secondary);
+  color: var(--text-gray);
   margin: 0;
 }
 
@@ -119,12 +119,12 @@
 .dashboards-table td {
   padding: 1rem 1.5rem;
   text-align: left;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .dashboards-table th {
   background-color: rgba(0, 0, 0, 0.2);
-  color: var(--text-secondary);
+  color: var(--text-gray);
   font-weight: 500;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -136,7 +136,7 @@
 }
 
 .dashboards-table td {
-  color: var(--text-primary);
+  color: var(--text-dark);
   font-size: 0.95rem;
 }
 
