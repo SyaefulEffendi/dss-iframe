@@ -1,8 +1,16 @@
-/* Layout Container */
 .login-container {
+  /* Force light mode variables */
+  --bg-light: #F8F9FA;
+  --bg-white: #FFFFFF;
+  --text-dark: #343A40;
+  --text-gray: #6c757d;
+  --border-light: #E5E7EB;
+
   display: flex;
   min-height: 100vh;
   width: 100%;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
 }
 
 /* --- Left Panel --- */
@@ -130,6 +138,8 @@ input[type="text"] {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-base);
   font-size: 1rem;
+  background-color: var(--bg-white);
+  color: var(--text-dark);
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
