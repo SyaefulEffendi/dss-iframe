@@ -14,7 +14,7 @@
 .stat-card {
   background-color: var(--bg-white);
   padding: 1.5rem;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);
 }
@@ -37,7 +37,7 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -63,7 +63,7 @@
 .chart-card {
   background-color: var(--bg-white);
   padding: 1.5rem;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -98,7 +98,7 @@
 .legend-dot {
   width: 8px;
   height: 8px;
-  background-color: var(--primary-color);
+  background-color: var(--primary-purple);
   border-radius: 50%;
 }
 
@@ -111,7 +111,7 @@
 .table-card {
   background-color: var(--bg-white);
   padding: 1.5rem;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-sm);
 }
@@ -202,4 +202,3 @@
     grid-template-columns: 1fr;
   }
 }
-

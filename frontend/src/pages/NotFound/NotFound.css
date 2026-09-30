@@ -5,13 +5,13 @@
   min-height: 100vh;
   background-color: var(--bg-light);
   padding: 2rem;
-  font-family: inherit;
+  font-family: 'Inter', sans-serif;
 }
 
 .notfound-content {
   background-color: var(--bg-white);
   padding: 3rem 2rem;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   box-shadow: var(--shadow-lg);
   text-align: center;
   max-width: 400px;
@@ -57,11 +57,11 @@
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  background-color: var(--primary-color);
+  background-color: var(--primary-purple);
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -71,4 +71,3 @@
 .notfound-btn:hover {
   background-color: var(--primary-hover);
 }
-

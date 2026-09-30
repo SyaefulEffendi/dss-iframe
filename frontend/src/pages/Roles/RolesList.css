@@ -28,7 +28,7 @@
   color: white;
   border: none;
   padding: 0.75rem 1.25rem;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -41,7 +41,7 @@
 
 .roles-card {
   background-color: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   border: 1px solid var(--border-light);
@@ -86,7 +86,7 @@
   background: none;
   border: none;
   padding: 0.4rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   cursor: pointer;
   color: #9ca3af;
   transition: all 0.2s;
@@ -108,7 +108,7 @@
 /* Modal SM Override & Fixes */
 .modal-content-sm {
   background-color: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
@@ -154,7 +154,7 @@
 .modal-content-sm .form-group select {
   padding: 0.75rem;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   outline: none;
   font-family: inherit;
   font-size: 0.95rem;
@@ -185,7 +185,7 @@
   color: var(--text-dark);
   border: 1px solid var(--border-light);
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   width: auto;
@@ -200,7 +200,7 @@
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   width: auto;
@@ -209,4 +209,3 @@
 .modal-content-sm .submit-btn:hover {
   background-color: #4f46e5;
 }
-

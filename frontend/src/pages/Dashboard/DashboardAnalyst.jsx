@@ -96,7 +96,7 @@ const DashboardAnalyst = () => {
               <BarChart data={stats.charts_by_type} margin={{ top: 20, right: 30, left: -20, bottom: 5 }}>
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--text-gray)'}} />
                 <Tooltip cursor={{fill: 'var(--bg-light)'}} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-md)' }} />
-                <Bar dataKey="value" fill="var(--primary-color)" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                <Bar dataKey="value" fill="var(--primary-purple)" radius={[4, 4, 0, 0]} maxBarSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -115,7 +115,7 @@ const DashboardAnalyst = () => {
               <LineChart data={simulatedLineData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-light)" />
                 <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: 'var(--shadow-md)' }} />
-                <Line type="monotone" dataKey="value" stroke="var(--primary-color)" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="value" stroke="var(--primary-purple)" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>

@@ -39,7 +39,7 @@
 .explorer-sidebar {
     width: 250px;
     background: var(--bg-white);
-    border-radius: var(--radius-lg);
+    border-radius: 12px;
     box-shadow: var(--shadow-sm);
     padding: 16px;
     display: flex;
@@ -64,7 +64,7 @@
 
 .table-item {
     padding: 10px 12px;
-    border-radius: var(--radius-md);
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
@@ -98,7 +98,7 @@
 .explorer-main {
     flex: 1;
     background: var(--bg-white);
-    border-radius: var(--radius-lg);
+    border-radius: 12px;
     box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
@@ -197,7 +197,7 @@
     font-size: 12px;
     background: var(--bg-light);
     padding: 2px 6px;
-    border-radius: var(--radius-sm);
+    border-radius: 4px;
 }
 
 .loading-data-state {
@@ -247,4 +247,3 @@
         max-height: 250px;
     }
 }
-

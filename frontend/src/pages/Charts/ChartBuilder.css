@@ -2,7 +2,7 @@
   padding: 1.5rem;
   background-color: var(--bg-light);
   min-height: calc(100vh - 70px);
-  font-family: inherit;
+  font-family: 'Inter', sans-serif;
 }
 
 .builder-header {
@@ -30,7 +30,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.4rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
@@ -48,7 +48,7 @@
 /* Editor Section */
 .editor-section {
   background-color: #1e1e1e;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -82,7 +82,7 @@
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -94,7 +94,7 @@
 }
 
 .run-btn:disabled {
-  background-color: var(--text-gray);
+  background-color: #6b7280;
   cursor: not-allowed;
 }
 
@@ -119,7 +119,7 @@
 /* Results Section */
 .results-section {
   background-color: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   display: flex;
@@ -195,7 +195,7 @@
 .empty-results {
   padding: 3rem 2rem;
   text-align: center;
-  color: var(--text-gray);
+  color: #888;
 }
 
 .empty-results p {
@@ -207,7 +207,7 @@
 .alert-box {
   margin-top: 1rem;
   padding: 1rem 1.5rem;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   background-color: #fef2f2;
   border-left: 4px solid #ef4444;
   color: #b91c1c;
@@ -228,7 +228,7 @@
 .config-sidebar {
   flex: 0 0 300px;
   background-color: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   display: flex;
@@ -251,7 +251,7 @@
 .config-select {
   padding: 0.6rem;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-size: 0.9rem;
   background-color: var(--bg-light);
   color: var(--text-dark);
@@ -269,7 +269,7 @@
   color: white;
   border: none;
   padding: 0.75rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -291,7 +291,7 @@
 .preview-container {
   flex: 1;
   background-color: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
   min-height: 400px;
@@ -328,7 +328,7 @@
 
 .modal-content {
   background: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   width: 100%;
   max-width: 500px;
   padding: 2rem;
@@ -352,7 +352,7 @@
   background: var(--bg-white);
   border: 1px solid var(--border-light);
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
   color: var(--text-dark);
@@ -366,7 +366,7 @@
   background: #10b981;
   border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
   color: white;
@@ -380,7 +380,7 @@
   width: 100%;
   padding: 0.6rem;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-size: 0.9rem;
   background-color: var(--bg-light);
   color: var(--text-dark);
@@ -424,4 +424,3 @@
     gap: 1rem;
   }
 }
-

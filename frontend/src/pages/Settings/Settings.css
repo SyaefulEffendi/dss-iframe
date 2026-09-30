@@ -26,7 +26,7 @@
 
 .settings-card {
   background: var(--bg-white);
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
 }
@@ -56,7 +56,7 @@
   width: 100%;
   padding: 0.625rem;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-size: 0.875rem;
   outline: none;
   transition: border-color 0.2s;
@@ -72,7 +72,7 @@
 .highlight-password {
   background-color: var(--bg-light);
   padding: 1rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   border: 1px dashed #fbbf24;
 }
 
@@ -88,7 +88,7 @@
 
 .alert {
   padding: 0.75rem 1rem;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   margin-bottom: 1rem;
   font-size: 0.875rem;
 }
@@ -110,7 +110,7 @@
   color: white;
   padding: 0.625rem 1.25rem;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -130,7 +130,7 @@
   color: var(--text-dark);
   padding: 0.625rem 1.25rem;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
+  border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -145,4 +145,3 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
-

@@ -118,7 +118,7 @@ const ResetPassword = () => {
       <div className="login-left-panel">
         <div className="login-brand">
           <div className="logo-icon">
-            <BarChart2 size={24} color="var(--primary-color)" />
+            <BarChart2 size={24} color="var(--primary-purple)" />
           </div>
           <span className="logo-text">DSS Analytics</span>
         </div>
@@ -169,7 +169,7 @@ const ResetPassword = () => {
                       type="button" 
                       onClick={handleResendOtp}
                       disabled={isResending}
-                      style={{ background: 'none', border: 'none', color: 'var(--primary-color)', fontSize: '0.875rem', cursor: 'pointer', fontWeight: 500, padding: 0 }}
+                      style={{ background: 'none', border: 'none', color: 'var(--primary-purple)', fontSize: '0.875rem', cursor: 'pointer', fontWeight: 500, padding: 0 }}
                     >
                       {isResending ? 'Mengirim...' : 'Kirim Ulang OTP'}
                     </button>
