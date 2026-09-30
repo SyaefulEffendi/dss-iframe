@@ -127,3 +127,52 @@ input:focus, textarea:focus, select:focus {
   border-color: var(--primary-purple);
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
+
+/* --- Global Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  /* Make all specific tables scroll horizontally */
+  .roles-table, 
+  .charts-table, 
+  .dashboards-table, 
+  .dss-table,
+  .results-table,
+  .explorer-table {
+    display: block !important;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Stack header controls vertically */
+  .charts-header,
+  .users-header,
+  .roles-header,
+  .dashboards-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1rem;
+  }
+  
+  .charts-actions,
+  .users-actions,
+  .roles-actions,
+  .dashboards-actions,
+  .explorer-actions {
+    flex-direction: column !important;
+    width: 100%;
+  }
+
+  /* Ensure inputs and buttons stretch */
+  .charts-actions .search-box,
+  .users-actions .search-box,
+  .roles-actions .search-box,
+  .dashboards-actions .search-box,
+  .charts-actions button,
+  .users-actions button,
+  .roles-actions button,
+  .dashboards-actions button,
+  .explorer-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}
